@@ -3,9 +3,11 @@ const Schema = mongoose.Schema
 
 const commentSchema = new Schema({
     content: String,
-    author: mongoose.Types.ObjectId,
-    likes: Number,
-    replies: [mongoose.Types.ObjectId]
+    author: {type: mongoose.Types.ObjectId, ref: "User"},
+    likes: {type: Number, default: 0},
+    post: {type: mongoose.Types.ObjectId, ref: "Post"},
+    parent: {type: mongoose.Types.ObjectId, ref: "Comment"},
+    replies: [{type: mongoose.Types.ObjectId, ref: "Comment"}]
 })
 
 const Comment = mongoose.model("Comment", commentSchema)
