@@ -21,4 +21,14 @@ router.post("/", async (req, res) => {
     
 })
 
+router.delete(`/:id`, async (req, res) => {
+    const deleteId = req.params.id
+    try {
+        await User.findByIdAndDelete(deleteId)
+        res.send(`deleted user ${deleteId}`).status(204)
+    } catch (err) {
+        res.send("User not found").status(400)
+    }
+})
+
 module.exports = router

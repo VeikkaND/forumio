@@ -10,8 +10,8 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    posts: [mongoose.Types.ObjectId],
-    comments: [mongoose.Types.ObjectId]
+    posts: [{type: mongoose.Types.ObjectId, ref: "Post"}],
+    comments: [{type: mongoose.Types.ObjectId, ref: "Comment"}]
 })
 
 const User = mongoose.model("User", userSchema)
