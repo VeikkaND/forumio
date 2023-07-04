@@ -2,11 +2,13 @@ const router = require("express").Router()
 const Comment = require("../models/comment")
 const Post = require("../models/post")
 
+// get all comments
 router.get("/", async (req, res) => {
     const comments = await Comment.find({})
     res.json(comments).status(200)
 })
 
+// get comment by id
 router.get("/:id", async (req, res) => {
     const comment = await Comment.findById(req.params.id)
         .populate("replies")
@@ -17,6 +19,17 @@ router.get("/:id", async (req, res) => {
     }  
 })
 
+// get comments by post
+router.get("/:postid/all", async (req, res) => {
+    try {
+        const comments = await Comment.find({post: req.params.postid})
+        res.json(comments).status(200)
+    } catch (err) {
+        res.send("something went wrong").status(404)
+    }  
+})
+
+// post new comment
 router.post("/", async (req, res) => {
     const request = req.body
     if(!request.parentId) {
@@ -48,6 +61,7 @@ router.post("/", async (req, res) => {
     }
 })
 
+// delete comment
 router.delete("/:id", async (req, res) => {
     try {
         const comment = await Comment.findById(req.params.id)
@@ -63,6 +77,7 @@ router.delete("/:id", async (req, res) => {
     }
 })
 
+// like comment
 router.put("/:id", async (req, res) => {
     try {
         const comment = await Comment.findById(req.params.id)
