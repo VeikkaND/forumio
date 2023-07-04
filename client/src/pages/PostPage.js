@@ -31,12 +31,12 @@ const Comment = ({comment}) => {
         marginLeft: 10
     }
     if(comment.parent) {
-        const replyStyle = {...tempStyle, marginLeft: 15}
+        const replyStyle = {...tempStyle, marginLeft: comment.depth * 10}
         return (
             <div style={replyStyle}>
-                {comment.author_name} &nbsp; comment id: {comment._id}
-                <p>{comment.content}</p>
+                {comment.author_name} &nbsp; comment id: {comment._id} <br/>
                 parent comment: {comment.parent} <br/>
+                <p>{comment.content}</p>
                 {likes} likes &nbsp;
                 <button onClick={handleLike}>like</button>
                 <button onClick={handleDislike}>dislike</button>
@@ -45,9 +45,8 @@ const Comment = ({comment}) => {
     }
     return (
         <div style={tempStyle}>
-            {comment.author_name} &nbsp; comment id: {comment._id}
+            {comment.author_name} &nbsp; comment id: {comment._id} <br/>
             <p>{comment.content}</p>
-            parent comment: {comment.parent} <br/>
             {likes} likes &nbsp;
             <button onClick={handleLike}>like</button>
             <button onClick={handleDislike}>dislike</button>
@@ -57,15 +56,18 @@ const Comment = ({comment}) => {
 
 const Comments = ({postId}) => {
     const [comments, setComments] = useState([])
+    let depth = 2 
 
     const replyRecursion = (
         reply, parentComment, orderedComments, replyComments) => {
         if(typeof(reply) === "string") {
             reply = replyComments.find(r => r._id === reply)
         }
+        reply.depth = depth
         orderedComments.push(reply)
         if(reply.replies.length !== 0) {
             reply.replies.forEach(r => {
+                depth += 1
                 replyRecursion(r, reply, orderedComments, replyComments)
             })
         }
@@ -82,8 +84,11 @@ const Comments = ({postId}) => {
             let orderedComments = [] 
             parentComments.forEach(parentComment => {
                 orderedComments.push(parentComment)
+                console.log("parent replies", parentComment.replies)
+                console.log("replies", replyComments)
                 parentComment.replies
                     .forEach(reply => {
+                        depth = 2
                         replyRecursion(
                             reply, parentComment, orderedComments, replyComments)
                 })

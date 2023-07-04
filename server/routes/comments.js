@@ -25,7 +25,7 @@ router.get("/:postid/all", async (req, res) => {
     try {
         const comments = await Comment
             .find({post: req.params.postid})
-                .populate("replies")
+                //.populate("replies")
         res.json(comments).status(200)
     } catch (err) {
         res.send("something went wrong").status(404)
@@ -42,9 +42,9 @@ router.post("/", async (req, res) => {
             author_name: request.author_name,
             post: request.postId,
         })
-        const post = await Post.findById(request.postId)
+        const post = await Post.findById(newComment.post)
         const newReplies = post.replies.concat(newComment._id)
-        await Post.findByIdAndUpdate(request.postId, {replies: newReplies})
+        await Post.findByIdAndUpdate(newComment.post, {replies: newReplies})
     } else {
         var newComment = new Comment({
             content: request.content,
@@ -56,6 +56,10 @@ router.post("/", async (req, res) => {
         const parentComment = await Comment.findById(request.parent)
         const newReplies = parentComment.replies.concat(newComment._id)
         await Comment.findByIdAndUpdate(request.parent, {replies: newReplies})
+
+        const post = await Post.findById(newComment.post)
+        const newPostReplies = post.replies.concat(newComment._id)
+        await Post.findByIdAndUpdate(newComment.post, {replies: newPostReplies})
     }
     try {
         newComment.save()
@@ -70,7 +74,20 @@ router.delete("/:id", async (req, res) => {
     try {
         const comment = await Comment.findById(req.params.id)
         if(comment) {
-            await Comment.findByIdAndDelete(comment._id)
+            await Comment.findByIdAndDelete(comment.id)
+            const post = await Post.findById(comment.post)
+            const newPostReplies = post.replies
+                .filter(reply => !reply._id.equals(comment._id))
+            await Post
+                .findByIdAndUpdate(comment.post, {replies: newPostReplies})
+            if(comment.parent) {
+                const parentComment = await Comment.findById(comment.parent)
+                const parentReplies = parentComment.replies
+                const newParentReplies = parentReplies
+                    .filter(reply => !reply._id.equals(comment._id))
+                await Comment.findByIdAndUpdate(parentComment._id, 
+                    {replies: newParentReplies})
+            }
             res.send("comment deleted").status(204)
         } else {
             res.send("comment not found").status(404)
