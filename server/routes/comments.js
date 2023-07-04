@@ -49,8 +49,8 @@ router.post("/", async (req, res) => {
 })
 
 router.delete("/:id", async (req, res) => {
-    const comment = await Comment.findById(req.params.id)
     try {
+        const comment = await Comment.findById(req.params.id)
         if(comment) {
             await Comment.findByIdAndDelete(comment._id)
             res.send("comment deleted").status(204)
@@ -60,6 +60,17 @@ router.delete("/:id", async (req, res) => {
         
     } catch (err) {
         res.send("something went wrong").status(400)
+    }
+})
+
+router.put("/:id", async (req, res) => {
+    try {
+        const comment = await Comment.findById(req.params.id)
+        const newLikes = comment.likes += req.body.vote
+        await Comment.findByIdAndUpdate(req.params.id, {likes: newLikes})
+        res.json({...comment, likes: newLikes}).status(200)
+    } catch (err) {
+        res.send("could not like comment").status(400)
     }
 })
 
