@@ -3,22 +3,93 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 
 const Comment = ({comment}) => {
+    const [likes, setLikes] = useState(comment.likes)
+    const handleLike = async () => {
+        try {
+            const res = await axios
+                .put(`/api/comments/${comment._id}`, {vote: 1})
+            setLikes(res.data.likes)
+        } catch (err) {
+            console.log("couldn't vote comment")
+        }
+        
+    }
+    const handleDislike = async () => {
+        try {
+            const res = await axios
+                .put(`/api/comments/${comment._id}`, {vote: -1})
+            setLikes(res.data.likes)
+        } catch (err) {
+            console.log("couldn't vote comment")
+        }
+    }
+
+    // TODO clean this vvv and make replies under replies
+    const tempStyle = {
+        border: "solid 1px",
+        margin: 5,
+        marginLeft: 10
+    }
+    if(comment.parent) {
+        const replyStyle = {...tempStyle, marginLeft: 15}
+        return (
+            <div style={replyStyle}>
+                {comment.author_name} &nbsp; comment id: {comment._id}
+                <p>{comment.content}</p>
+                parent comment: {comment.parent} <br/>
+                {likes} likes &nbsp;
+                <button onClick={handleLike}>like</button>
+                <button onClick={handleDislike}>dislike</button>
+            </div>
+        )
+    }
     return (
-        <div>
-            {comment.author_name}
+        <div style={tempStyle}>
+            {comment.author_name} &nbsp; comment id: {comment._id}
             <p>{comment.content}</p>
             parent comment: {comment.parent} <br/>
-            {comment.likes} likes
+            {likes} likes &nbsp;
+            <button onClick={handleLike}>like</button>
+            <button onClick={handleDislike}>dislike</button>
         </div>
     )
 }
 
 const Comments = ({postId}) => {
     const [comments, setComments] = useState([])
+
+    const replyRecursion = (
+        reply, parentComment, orderedComments, replyComments) => {
+        if(typeof(reply) === "string") {
+            reply = replyComments.find(r => r._id === reply)
+        }
+        orderedComments.push(reply)
+        if(reply.replies.length !== 0) {
+            reply.replies.forEach(r => {
+                replyRecursion(r, reply, orderedComments, replyComments)
+            })
+        }
+    }
+
     useEffect(() => {
         async function getAllComments() {
             const res = await axios.get(`/api/comments/${postId}/all`)
-            setComments(res.data)
+            const comments = res.data.sort((a , b) => {
+                return b.likes - a.likes
+            })
+            const parentComments = comments.filter(comment => !comment.parent)
+            const replyComments = comments.filter(comment => comment.parent)
+            let orderedComments = [] 
+            parentComments.forEach(parentComment => {
+                orderedComments.push(parentComment)
+                parentComment.replies
+                    .forEach(reply => {
+                        replyRecursion(
+                            reply, parentComment, orderedComments, replyComments)
+                })
+            })
+
+            setComments(orderedComments)
         }
         getAllComments()
     }, [])

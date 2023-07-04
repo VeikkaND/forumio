@@ -1,6 +1,7 @@
 const router = require("express").Router()
 const Comment = require("../models/comment")
 const Post = require("../models/post")
+const { populate } = require("../models/subforum")
 
 // get all comments
 router.get("/", async (req, res) => {
@@ -22,7 +23,9 @@ router.get("/:id", async (req, res) => {
 // get comments by post
 router.get("/:postid/all", async (req, res) => {
     try {
-        const comments = await Comment.find({post: req.params.postid})
+        const comments = await Comment
+            .find({post: req.params.postid})
+                .populate("replies")
         res.json(comments).status(200)
     } catch (err) {
         res.send("something went wrong").status(404)
