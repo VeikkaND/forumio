@@ -84,8 +84,6 @@ const Comments = ({postId}) => {
             let orderedComments = [] 
             parentComments.forEach(parentComment => {
                 orderedComments.push(parentComment)
-                console.log("parent replies", parentComment.replies)
-                console.log("replies", replyComments)
                 parentComment.replies
                     .forEach(reply => {
                         depth = 2

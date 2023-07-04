@@ -1,6 +1,7 @@
 const router = require("express").Router()
 const Post = require("../models/post")
 const Subforum = require("../models/subforum")
+const Comment = require("../models/comment")
 
 // get all posts
 router.get("/", async (req, res) => {
@@ -35,6 +36,7 @@ router.get("/:subforum/all", async (req, res) => {
 router.delete("/:id", async (req, res) => {
     try {
         await Post.findByIdAndDelete(req.params.id)
+        await Comment.deleteMany({post: req.params.id})
         res.send("post deleted").status(204)
     } catch (err) {
         res.send("user not found").status(404)
