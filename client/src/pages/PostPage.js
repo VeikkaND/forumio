@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import commentService from "../services/comments"
+import postsService from "../services/posts"
 
 const Comment = ({comment}) => {
     const [likes, setLikes] = useState(comment.likes)
@@ -110,14 +111,34 @@ const Comments = ({postId}) => {
 const Post = () => {
     const {subforum, id} = useParams()
     const [post, setPost] = useState(null)
+    const [likes, setLikes] = useState(0)
 
     useEffect(() => {
         async function getPost() {
             const post = await commentService.getPost(id)
             setPost(post)
+            setLikes(post.likes)
         }
         getPost()
     }, [])
+
+    const handleLike = async () => {
+        try {
+            const res = await postsService.likePost(post._id, 1)
+            setLikes(res.likes)
+        } catch (err) {
+            console.log("couldn't vote post")
+        }
+        
+    }
+    const handleDislike = async () => {
+        try {
+            const res = await postsService.likePost(post._id, -1)
+            setLikes(res.likes)
+        } catch (err) {
+            console.log("couldn't vote post")
+        }
+    }
 
     if(post) {
         return (
@@ -126,7 +147,9 @@ const Post = () => {
                 <h2>{post.title}</h2>
                 by {post.author_name}
                 <p>{post.content}</p>
-                {post.likes} likes
+                {likes} likes &nbsp; 
+                <button onClick={handleLike}>like</button>
+                <button onClick={handleDislike}>dislike</button>
                 <h4>comments</h4>
                 <Comments postId={post._id}/>
             </div>
