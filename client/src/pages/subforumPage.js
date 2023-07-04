@@ -17,6 +17,10 @@ const SubforumPage = () => {
     const {subforum} = useParams()
     const [posts, setPosts] = useState([])
 
+    const handleNewPost = () => {
+        // TODO functionality/new view for creating a new post
+    }
+
     useEffect(() => {
         async function getPosts() {
             const posts = await postsService.getAllPostsOfSubforum(subforum)
@@ -28,6 +32,7 @@ const SubforumPage = () => {
     return (
         <div>
             <h2>{subforum}</h2>
+            <button onClick={handleNewPost}>new post</button>
             {posts.map(post => <Post post={post} subforum={subforum} 
                 key={post._id}/>)}
         </div>

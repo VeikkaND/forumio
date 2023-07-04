@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import commentService from "../services/comments"
 import postsService from "../services/posts"
+import CommentForm from "../components/commentForm"
 
 const Comment = ({comment}) => {
     const [likes, setLikes] = useState(comment.likes)
@@ -151,6 +152,7 @@ const Post = () => {
                 <button onClick={handleLike}>like</button>
                 <button onClick={handleDislike}>dislike</button>
                 <h4>comments</h4>
+                <CommentForm />
                 <Comments postId={post._id}/>
             </div>
         )
