@@ -1,14 +1,13 @@
 import { Link, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
-import axios from "axios"
+import commentService from "../services/comments"
 
 const Comment = ({comment}) => {
     const [likes, setLikes] = useState(comment.likes)
     const handleLike = async () => {
         try {
-            const res = await axios
-                .put(`/api/comments/${comment._id}`, {vote: 1})
-            setLikes(res.data.likes)
+            const res = await commentService.likeComment(comment, 1)
+            setLikes(res.likes)
         } catch (err) {
             console.log("couldn't vote comment")
         }
@@ -16,9 +15,8 @@ const Comment = ({comment}) => {
     }
     const handleDislike = async () => {
         try {
-            const res = await axios
-                .put(`/api/comments/${comment._id}`, {vote: -1})
-            setLikes(res.data.likes)
+            const res = await commentService.likeComment(comment, -1)
+            setLikes(res.likes)
         } catch (err) {
             console.log("couldn't vote comment")
         }
@@ -75,8 +73,8 @@ const Comments = ({postId}) => {
 
     useEffect(() => {
         async function getAllComments() {
-            const res = await axios.get(`/api/comments/${postId}/all`)
-            const comments = res.data.sort((a , b) => {
+            const data = await commentService.getAllCommentsOfPost(postId)
+            const comments = data.sort((a , b) => {
                 return b.likes - a.likes
             })
             const parentComments = comments.filter(comment => !comment.parent)
@@ -115,8 +113,8 @@ const Post = () => {
 
     useEffect(() => {
         async function getPost() {
-            const res = await axios.get(`/api/posts/${id}`)
-            setPost(res.data)
+            const post = await commentService.getPost(id)
+            setPost(post)
         }
         getPost()
     }, [])

@@ -1,7 +1,7 @@
-import axios from "axios"
 import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
+import postsService from "../services/posts"
 
 const Post = ({post, subforum}) => {
     return (
@@ -19,8 +19,7 @@ const SubforumPage = () => {
 
     useEffect(() => {
         async function getPosts() {
-            const res = await axios.get(`/api/posts/${subforum}/all`)
-            const posts = res.data
+            const posts = await postsService.getAllPostsOfSubforum(subforum)
             setPosts(posts)
         } 
         getPosts()
