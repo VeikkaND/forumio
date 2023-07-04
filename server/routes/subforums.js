@@ -2,11 +2,13 @@ const express = require("express")
 const router = express.Router()
 const Subforum = require("../models/subforum")
 
+//get all subforums
 router.get("/", async (req, res) => {
     const subforums = await Subforum.find({})
     res.json(subforums)
 })
 
+//get subforum with name
 router.get("/:subforum", async (req, res) => {
     const subforum = await Subforum.find({name: req.params.subforum})
     if(subforum.length !== 0) {
@@ -34,6 +36,8 @@ router.post("/", async (req, res) => {
     
 })
 
+//delete subforum with name
+// TODO delete posts and comments from database when deleting subforum 
 router.delete(`/:subforum`, async (req, res) => {
     const subforum = await Subforum.findOne({name: req.params.subforum})
     if(subforum) {
