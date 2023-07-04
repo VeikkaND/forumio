@@ -32,26 +32,27 @@ router.get("/:postid/all", async (req, res) => {
 // post new comment
 router.post("/", async (req, res) => {
     const request = req.body
-    if(!request.parentId) {
+    if(!request.parent) {
         var newComment = new Comment({
             content: request.content,
             author: request.authorId,
+            author_name: request.author_name,
             post: request.postId,
         })
         const post = await Post.findById(request.postId)
         const newReplies = post.replies.concat(newComment._id)
-        console.log(post.replies)
         await Post.findByIdAndUpdate(request.postId, {replies: newReplies})
     } else {
         var newComment = new Comment({
             content: request.content,
             author: request.authorId,
+            author_name: request.author_name,
             post: request.postId,
-            parent: request.parentId
+            parent: request.parent
         })
-        const parentComment = await Comment.findById(request.parentId)
+        const parentComment = await Comment.findById(request.parent)
         const newReplies = parentComment.replies.concat(newComment._id)
-        await Comment.findByIdAndUpdate(request.parentId, {replies: newReplies})
+        await Comment.findByIdAndUpdate(request.parent, {replies: newReplies})
     }
     try {
         newComment.save()

@@ -6,6 +6,7 @@ const postSchema = new Schema({
     content: String,
     likes: {type: Number, default: 0},
     author: {type: mongoose.Types.ObjectId, ref: "User"},
+    author_name: String,
     subforum: {type: mongoose.Types.ObjectId, ref: "Subforum"},
     replies: [{type: mongoose.Types.ObjectId, ref: "Comment"}]
 })

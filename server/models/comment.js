@@ -4,6 +4,7 @@ const Schema = mongoose.Schema
 const commentSchema = new Schema({
     content: String,
     author: {type: mongoose.Types.ObjectId, ref: "User"},
+    author_name: String,
     likes: {type: Number, default: 0},
     post: {type: mongoose.Types.ObjectId, ref: "Post"},
     parent: {type: mongoose.Types.ObjectId, ref: "Comment"},

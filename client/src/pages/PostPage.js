@@ -5,7 +5,7 @@ import axios from "axios"
 const Comment = ({comment}) => {
     return (
         <div>
-            {comment.author}
+            {comment.author_name}
             <p>{comment.content}</p>
             parent comment: {comment.parent} <br/>
             {comment.likes} likes
@@ -52,6 +52,7 @@ const Post = () => {
             <div>
                 <Link to={`/${subforum}`}>return to {subforum}</Link>
                 <h2>{post.title}</h2>
+                by {post.author_name}
                 <p>{post.content}</p>
                 {post.likes} likes
                 <h4>comments</h4>

@@ -49,6 +49,7 @@ router.post("/", async (req, res) => {
         title: request.title,
         content: request.content,
         author: request.authorId,
+        author_name: request.author_name,
         subforum: request.subforumId,
     })
     try {
