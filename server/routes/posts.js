@@ -1,11 +1,14 @@
 const router = require("express").Router()
 const Post = require("../models/post")
+const Subforum = require("../models/subforum")
 
+// get all posts
 router.get("/", async (req, res) => {
     const posts = await Post.find({})
     res.json(posts).status(200)
 })
 
+// get post with id
 router.get("/:id", async (req, res) => {
     try {
         const post = await Post.findById(req.params.id)
@@ -17,6 +20,18 @@ router.get("/:id", async (req, res) => {
     
 })
 
+// get all posts for subforum
+router.get("/:subforum/all", async (req, res) => {
+    try {
+        const subforum = await Subforum.findOne({name: req.params.subforum})
+        const posts = await Post.find({subforum: subforum.id})
+        res.json(posts).status(200)
+    } catch (err) {
+        res.send("something went wrong").status(400)
+    }
+})
+
+// delete post with id
 router.delete("/:id", async (req, res) => {
     try {
         await Post.findByIdAndDelete(req.params.id)
@@ -27,6 +42,7 @@ router.delete("/:id", async (req, res) => {
     
 })
 
+// add post
 router.post("/", async (req, res) => {
     const request = req.body
     const newPost = new Post({
@@ -44,6 +60,7 @@ router.post("/", async (req, res) => {
     
 })
 
+// add/remove likes to post
 router.put("/:id", async (req, res) => {
     try {
         const post = await Post.findById(req.params.id)

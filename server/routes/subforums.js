@@ -7,7 +7,7 @@ router.get("/", async (req, res) => {
     res.json(subforums)
 })
 
-router.get(`/:subforum`, async (req, res) => {
+router.get("/:subforum", async (req, res) => {
     const subforum = await Subforum.find({name: req.params.subforum})
     if(subforum.length !== 0) {
         res.json(subforum)
