@@ -7,8 +7,7 @@ const userSchema = new Schema({
         required: true
     },
     password: {
-        type: String,
-        required: true
+        type: String
     },
     posts: [{type: mongoose.Types.ObjectId, ref: "Post"}],
     comments: [{type: mongoose.Types.ObjectId, ref: "Comment"}]

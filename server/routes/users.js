@@ -1,4 +1,7 @@
 const router = require("express").Router()
+require("dotenv").config()
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 const User = require("../models/user")
 
 router.get("/", async (req, res) => {
@@ -9,16 +12,35 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
     const request = req.body
     const newUser = new User({
-        username: request.username,
-        password: request.password
+        username: request.username
     })
+    
     try {
         await newUser.save()
+        const saltRounds = 10
+        bcrypt.hash(request.password, saltRounds, async (err, hash) => {
+            await User.findByIdAndUpdate(newUser._id, {password: hash})
+        })  
         res.json(newUser).status(201)
     } catch(err) {
         res.status(400)
     }
     
+})
+
+router.get("/login", async (req, res) => {
+    const user = await User.findOne({username: req.headers.username})
+    if(user) {
+        bcrypt.compare(req.headers.password, user.password, (err, result) => {
+            if(result === true) {
+                // return token
+                const token = jwt.sign({user: user}, process.env.SECRET)
+                res.send(token).status(200)
+            } else {
+                res.send(false).status(401)
+            }
+        })
+    }
 })
 
 router.delete(`/:id`, async (req, res) => {
