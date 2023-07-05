@@ -1,6 +1,8 @@
 const router = require("express").Router()
+require("dotenv").config()
 const Comment = require("../models/comment")
 const Post = require("../models/post")
+const jwt = require("jsonwebtoken")
 const { populate } = require("../models/subforum")
 
 // get all comments
@@ -34,39 +36,50 @@ router.get("/:postid/all", async (req, res) => {
 
 // post new comment
 router.post("/", async (req, res) => {
-    const request = req.body
-    if(!request.parent) {
-        var newComment = new Comment({
-            content: request.content,
-            author: request.authorId,
-            author_name: request.author_name,
-            post: request.postId,
-        })
-        const post = await Post.findById(newComment.post)
-        const newReplies = post.replies.concat(newComment._id)
-        await Post.findByIdAndUpdate(newComment.post, {replies: newReplies})
+    const comment = req.body.comment
+    const postId = req.body.postId
+    const authorization = req.headers.authorization
+    if(authorization.startsWith("Bearer ")) {
+        const token = authorization.replace("Bearer ", "")
+        const decodedToken = jwt.verify(token, process.env.SECRET)
+        if(!decodedToken.user.parent) {
+            var newComment = new Comment({
+                content: comment,
+                author: decodedToken.user.id,
+                author_name: decodedToken.user.username,
+                post: postId
+            })
+            const post = await Post.findById(newComment.post)
+            const newReplies = post.replies.concat(newComment._id)
+            await Post.findByIdAndUpdate(newComment.post, {replies: newReplies})
+        } else {
+            var newComment = new Comment({
+                content: comment,
+                author: decodedToken.user.authorId,
+                author_name: decodedToken.user.author_name,
+                post: postId,
+                //parent: TODO set parent when replying to comment
+            })
+            // fix this parent too vvvvv
+            const parentComment = await Comment.findById(decodedToken.user.parent)
+            const newReplies = parentComment.replies.concat(newComment._id)
+            // and this parent
+            await Comment
+                .findByIdAndUpdate(decodedToken.user.parent, {replies: newReplies})
+            const post = await Post.findById(newComment.post)
+            const newPostReplies = post.replies.concat(newComment._id)
+            await Post.findByIdAndUpdate(newComment.post, {replies: newPostReplies})
+        }
+        try {
+            newComment.save()
+            res.send(newComment).status(201)
+        } catch (err) {
+            res.send("something went wrong").status(400)
+        }
     } else {
-        var newComment = new Comment({
-            content: request.content,
-            author: request.authorId,
-            author_name: request.author_name,
-            post: request.postId,
-            parent: request.parent
-        })
-        const parentComment = await Comment.findById(request.parent)
-        const newReplies = parentComment.replies.concat(newComment._id)
-        await Comment.findByIdAndUpdate(request.parent, {replies: newReplies})
-
-        const post = await Post.findById(newComment.post)
-        const newPostReplies = post.replies.concat(newComment._id)
-        await Post.findByIdAndUpdate(newComment.post, {replies: newPostReplies})
+        res.send("Wrong authentication").status(401)
     }
-    try {
-        newComment.save()
-        res.send(newComment).status(201)
-    } catch (err) {
-        res.send("something went wrong").status(400)
-    }
+    
 })
 
 // delete comment

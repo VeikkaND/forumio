@@ -16,4 +16,13 @@ const getPost = async (id) => {
     return res.data
 }
 
-export default {likeComment, getAllCommentsOfPost, getPost}
+const postComment = async (comment, token, postId) => {
+    const res = await axios.post(`/api/comments`, {
+        comment: comment,
+        postId: postId
+    }, {
+        headers: {"Authorization": `Bearer ${token}`}
+    })
+}
+
+export default {likeComment, getAllCommentsOfPost, getPost, postComment}

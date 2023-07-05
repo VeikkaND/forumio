@@ -1,6 +1,8 @@
-import loginService from "../services/user"
+import usersService from "../services/user"
+import { useNavigate } from "react-router-dom"
 
 const LoginPage = () => {
+    const navigate = useNavigate()
     const handleSubmit = async (event) => {
         event.preventDefault()
         const username = event.target.username.value
@@ -11,12 +13,13 @@ const LoginPage = () => {
                 password: password
             }
         }
-        const res = await loginService.login(config)
+        const res = await usersService.login(config)
         if(res === false) {
             console.log("wrong password")
         } else {
             // set token to localStorage
             window.localStorage.setItem("token", res)
+            navigate("/")
         }
         
     }

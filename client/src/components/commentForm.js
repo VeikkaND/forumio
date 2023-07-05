@@ -1,6 +1,7 @@
 import { useState } from "react"
+import commentService from "../services/comments"
 
-const CommentForm = () => {
+const CommentForm = ({postId}) => {
     const [comment, setComment] = useState("")
 
     const handleInput = (event) => {
@@ -9,7 +10,10 @@ const CommentForm = () => {
     }
 
     const handleSubmit = (event) => {
-        // TODO after login, use login details for new comment
+        commentService.postComment(
+            comment, window.localStorage.getItem("token"), postId
+        )
+        // TODO update PostPage.js setComments() with new comments
     }
 
     return (

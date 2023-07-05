@@ -5,4 +5,9 @@ const login = async (config) => {
     return res.data
 }
 
-export default {login}
+const register = async (user) => {
+    const res = await axios.post("/api/users", user)
+    return res.data
+}
+
+export default {login, register}

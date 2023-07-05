@@ -10,7 +10,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Navbar />
+      <Navbar user={window.localStorage.getItem("token")}/>
       <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/:subforum" element={<SubforumPage />}></Route>

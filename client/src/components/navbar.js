@@ -6,6 +6,13 @@ const Navbar = ({user}) => {
 
     const handlelogin = () => {
         navigate("/login")
+        // TODO fix bug where login button stays after navigation
+    }
+
+    const handleLogout = () => {
+        window.localStorage.clear()
+        navigate("/")
+        // TODO fix bug where logout button stays after navigation
     }
 
     if(user) {
@@ -17,6 +24,7 @@ const Navbar = ({user}) => {
                 <span>
                     user info here &nbsp;
                 </span>
+                <button onClick={handleLogout}>logout</button>
             </div>
         )
     } else {

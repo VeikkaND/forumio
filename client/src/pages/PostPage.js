@@ -152,7 +152,7 @@ const Post = () => {
                 <button onClick={handleLike}>like</button>
                 <button onClick={handleDislike}>dislike</button>
                 <h4>comments</h4>
-                <CommentForm />
+                <CommentForm postId={post._id}/>
                 <Comments postId={post._id}/>
             </div>
         )
