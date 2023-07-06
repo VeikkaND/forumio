@@ -10,4 +10,12 @@ const likePost = async (id, vote) => {
     return res.data
 }
 
-export default {getAllPostsOfSubforum, likePost}
+const newPost = async (post, token) => {
+    const config = {
+        headers: {"Authorization": `Bearer ${token}`}
+    }
+    const res = await axios.post(`api/posts`, post, config)
+    return res.data
+}
+
+export default {getAllPostsOfSubforum, likePost, newPost}

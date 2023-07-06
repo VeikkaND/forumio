@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import postsService from "../services/posts"
+import Popup from "reactjs-popup"
 
 const Post = ({post, subforum}) => {
     return (
@@ -17,8 +18,13 @@ const SubforumPage = () => {
     const {subforum} = useParams()
     const [posts, setPosts] = useState([])
 
-    const handleNewPost = () => {
-        // TODO functionality/new view for creating a new post
+    const handleNewPost = (event) => {
+        const post = {
+            title: event.target.title.value,
+            content: event.target.content.value,
+            subforum: subforum
+        }
+        postsService.newPost(post, window.localStorage.getItem("token"))
     }
 
     useEffect(() => {
@@ -32,7 +38,17 @@ const SubforumPage = () => {
     return (
         <div>
             <h2>{subforum}</h2>
-            <button onClick={handleNewPost}>new post</button>
+            <Popup trigger={<button>new post</button>} position={"bottom left"}>
+                <div>
+                    <form onSubmit={handleNewPost}>
+                        <p>Title</p>
+                        <input name="title"></input> <br/>
+                        <p>Content</p>
+                        <textarea name="content"></textarea>
+                        <button type="submit"></button>
+                    </form>
+                </div>
+            </Popup>
             {posts.map(post => <Post post={post} subforum={subforum} 
                 key={post._id}/>)}
         </div>

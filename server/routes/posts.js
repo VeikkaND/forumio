@@ -47,12 +47,14 @@ router.delete("/:id", async (req, res) => {
 // add post
 router.post("/", async (req, res) => {
     const request = req.body
+    const decodedToken = req.decodedToken
+    const subforum = await Subforum.findOne({name: request.subforum})
     const newPost = new Post({
         title: request.title,
         content: request.content,
-        author: request.authorId,
-        author_name: request.author_name,
-        subforum: request.subforumId,
+        author: decodedToken.user._id,
+        author_name: decodedToken.user.username,
+        subforum: subforum._id
     })
     try {
         newPost.save()
