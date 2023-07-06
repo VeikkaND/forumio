@@ -78,7 +78,8 @@ router.post("/", async (req, res) => {
 router.delete("/:id", async (req, res) => {
     try {
         const comment = await Comment.findById(req.params.id)
-        if(comment) {
+        const decodedToken = req.decodedToken
+        if(comment && decodedToken.user.username === comment.author_name) {
             await Comment.findByIdAndDelete(comment.id)
             const post = await Post.findById(comment.post)
             const newPostReplies = post.replies

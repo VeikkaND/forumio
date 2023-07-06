@@ -3,77 +3,7 @@ import { useEffect, useState } from "react"
 import commentService from "../services/comments"
 import postsService from "../services/posts"
 import CommentForm from "../components/commentForm"
-
-const Comment = ({comment}) => {
-    const [likes, setLikes] = useState(comment.likes)
-    const [dislikes, setDislikes] = useState(comment.dislikes)
-    const handleLike = async () => {
-        if(!likes.includes(window.localStorage.getItem("userid"))) {
-            try {
-                const res = await commentService
-                    .voteComment(comment, 1, window.localStorage.getItem("token"))
-                setLikes(res.likes)
-                if(dislikes.includes(window.localStorage.getItem("userid"))) {
-                    // remove dislike if user has disliked post
-                    const res = await commentService
-                        .removeVote(comment, -1, 
-                            window.localStorage.getItem("token"))
-                    setDislikes(res.dislikes)
-                }
-            } catch (err) {
-                console.log("couldn't vote comment")
-            }
-        }
-    }
-    const handleDislike = async () => {
-        if(!dislikes.includes(window.localStorage.getItem("userid"))) {
-            try {
-                const res = await commentService
-                    .voteComment(comment, -1, window.localStorage.getItem("token"))
-                setDislikes(res.dislikes)
-                if(likes.includes(window.localStorage.getItem("userid"))) {
-                    // remove like if user has liked post
-                    const res = await commentService
-                        .removeVote(comment, 1, 
-                            window.localStorage.getItem("token"))
-                    setLikes(res.likes)
-                }
-            } catch (err) {
-                console.log("couldn't vote comment")
-            }
-        }
-        
-    }
-
-    // TODO clean this vvv and make replies under replies
-    const tempStyle = {
-        border: "solid 1px",
-        margin: 5,
-        marginLeft: 10
-    }
-    if(comment.parent) {
-        const replyStyle = {...tempStyle, marginLeft: comment.depth * 10}
-        return (
-            <div style={replyStyle}>
-                {comment.author_name} &nbsp; comment id: {comment._id} <br/>
-                parent comment: {comment.parent} <br/>
-                <p>{comment.content}</p>
-                {likes.length - dislikes.length} likes &nbsp;
-                <button onClick={handleLike}>like</button>
-                <button onClick={handleDislike}>dislike</button>
-            </div>
-        )
-    }
-    return (
-        <div style={tempStyle}>
-            {comment.author_name} &nbsp; comment id: {comment._id} <br/>
-            <p>{comment.content}</p>
-            {likes.length - dislikes.length} likes &nbsp;
-            <button onClick={handleLike}>like</button>
-            <button onClick={handleDislike}>dislike</button>
-        </div>
-    )
-}
+import Comment from "../components/comment"
 
 const Comments = ({postId}) => {
     const [comments, setComments] = useState([])

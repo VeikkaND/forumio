@@ -39,10 +39,20 @@ const postComment = async (comment, token, postId) => {
     })
 }
 
+const deleteComment = async (commentId, token) => {
+    const res = await axios.delete(`/api/comments/${commentId}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    return res.data
+}
+
 export default {
     voteComment, 
     removeVote, 
     getAllCommentsOfPost, 
     getPost, 
-    postComment
+    postComment,
+    deleteComment
 }

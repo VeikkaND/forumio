@@ -21,6 +21,7 @@ const LoginPage = () => {
             // set token to localStorage
             window.localStorage.setItem("token", res.token)
             window.localStorage.setItem("userid", res.userId)
+            window.localStorage.setItem("username", res.username)
             navigate("/")
         }
         
