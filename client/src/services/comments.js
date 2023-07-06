@@ -32,11 +32,13 @@ const getPost = async (id) => {
 
 const postComment = async (comment, token, postId) => {
     const res = await axios.post(`/api/comments`, {
-        comment: comment,
-        postId: postId
+        comment: comment.content,
+        postId: postId,
+        parent: comment.parent
     }, {
         headers: {"Authorization": `Bearer ${token}`}
     })
+    return res.data
 }
 
 const deleteComment = async (commentId, token) => {

@@ -10,9 +10,11 @@ const CommentForm = ({postId}) => {
     }
 
     const handleSubmit = (event) => {
+        const com = {
+            content: comment
+        }
         commentService.postComment(
-            comment, window.localStorage.getItem("token"), postId
-        )
+            com, window.localStorage.getItem("token"), postId)
         // TODO update PostPage.js setComments() with new comments
     }
 

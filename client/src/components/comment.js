@@ -1,9 +1,49 @@
 import commentService from "../services/comments"
 import { useState } from "react"
 
+const ReplyForm = ({parentId, postId}) => {
+    const [replyOpened, setReplyOpened] = useState(false)
+    const [displayStyle, setDisplayStyle] = useState("none")
+
+    const replyStyle = {
+        display: displayStyle
+    }
+
+    const handleReply = () => {
+        setReplyOpened(!replyOpened)
+        if(replyOpened === false) {
+            setDisplayStyle("block")
+        } else {
+            setDisplayStyle("none")
+        }
+    }
+
+    const handleSubmit = async (event) => {
+        const comment = {
+            content: event.target.content.value,
+            parent: parentId
+        }
+        const res = await commentService
+            .postComment(comment, window.localStorage.getItem("token"), postId)
+    }
+
+    return (
+        <div>
+            <button onClick={handleReply}></button>
+            <div style={replyStyle}>
+                <form onSubmit={handleSubmit}>
+                    <textarea name="content"></textarea>
+                    <button type="submit">send</button>
+                </form>
+            </div>
+        </div>
+    )
+}
+
 const Comment = ({comment}) => {
     const [likes, setLikes] = useState(comment.likes)
     const [dislikes, setDislikes] = useState(comment.dislikes)
+
     const handleLike = async () => {
         if(!likes.includes(window.localStorage.getItem("userid"))) {
             try {
@@ -54,6 +94,7 @@ const Comment = ({comment}) => {
         margin: 5,
         marginLeft: 10
     }
+
     if(comment.parent) { // comment is a reply to a comment
         const replyStyle = {...tempStyle, marginLeft: comment.depth * 10}
         if(comment.author_name === window.localStorage.getItem("username")) {
@@ -67,9 +108,12 @@ const Comment = ({comment}) => {
                     <button onClick={handleLike}>like</button>
                     <button onClick={handleDislike}>dislike</button>
                     <button onClick={handleDelete}>remove</button>
+                    <ReplyForm parentId={comment._id}
+                        postId={comment.post}/>
                 </div>
             )
         } else {
+            // user is not the comment author
             return (
                 <div style={replyStyle}>
                     {comment.author_name} &nbsp; comment id: {comment._id} <br/>
@@ -78,6 +122,8 @@ const Comment = ({comment}) => {
                     {likes.length - dislikes.length} likes &nbsp;
                     <button onClick={handleLike}>like</button>
                     <button onClick={handleDislike}>dislike</button>
+                    <ReplyForm parentId={comment._id}
+                        postId={comment.post}/>
                 </div>
             )
         }
@@ -93,9 +139,12 @@ const Comment = ({comment}) => {
                     <button onClick={handleLike}>like</button>
                     <button onClick={handleDislike}>dislike</button>
                     <button onClick={handleDelete}>remove</button>
+                    <ReplyForm parentId={comment._id}
+                        postId={comment.post}/>
                 </div>
             )
         } else {
+            // user is not the comment author
             return (
                 <div style={tempStyle}>
                     {comment.author_name} &nbsp; comment id: {comment._id} <br/>
@@ -103,6 +152,8 @@ const Comment = ({comment}) => {
                     {likes.length - dislikes.length} likes &nbsp;
                     <button onClick={handleLike}>like</button>
                     <button onClick={handleDislike}>dislike</button>
+                    <ReplyForm parentId={comment._id}
+                        postId={comment.post}/>
                 </div>
             )
         }

@@ -38,7 +38,7 @@ router.get("/:postid/all", async (req, res) => {
 router.post("/", async (req, res) => {
     const comment = req.body.comment
     const postId = req.body.postId
-    if(!req.decodedToken.user.parent) {
+    if(!req.body.parent) { // comment is a reply to a post
         var newComment = new Comment({
             content: comment,
             author: req.decodedToken.user.id,
@@ -48,20 +48,19 @@ router.post("/", async (req, res) => {
         const post = await Post.findById(newComment.post)
         const newReplies = post.replies.concat(newComment._id)
         await Post.findByIdAndUpdate(newComment.post, {replies: newReplies})
-    } else {
+    } else { // comment is a reply to a comment
+        const parent = req.body.parent
         var newComment = new Comment({
             content: comment,
-            author: req.decodedToken.user.authorId,
-            author_name: req.decodedToken.user.author_name,
+            author: req.decodedToken.user.id,
+            author_name: req.decodedToken.user.username,
             post: postId,
-            //parent: TODO set parent when replying to comment
+            parent: parent
         })
-        // fix this parent too vvvvv
-        const parentComment = await Comment.findById(req.decodedToken.user.parent)
+        const parentComment = await Comment.findById(parent)
         const newReplies = parentComment.replies.concat(newComment._id)
-        // and this parent
         await Comment
-            .findByIdAndUpdate(req.decodedToken.user.parent, {replies: newReplies})
+            .findByIdAndUpdate(parent, {replies: newReplies})
         const post = await Post.findById(newComment.post)
         const newPostReplies = post.replies.concat(newComment._id)
         await Post.findByIdAndUpdate(newComment.post, {replies: newPostReplies})
