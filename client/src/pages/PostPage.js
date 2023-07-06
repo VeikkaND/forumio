@@ -8,22 +8,41 @@ const Comment = ({comment}) => {
     const [likes, setLikes] = useState(comment.likes)
     const [dislikes, setDislikes] = useState(comment.dislikes)
     const handleLike = async () => {
-        try {
-            const res = await commentService
-                .voteComment(comment, 1, window.localStorage.getItem("token"))
-            setLikes(res.likes)
-        } catch (err) {
-            console.log("couldn't vote comment")
+        if(!likes.includes(window.localStorage.getItem("userid"))) {
+            try {
+                const res = await commentService
+                    .voteComment(comment, 1, window.localStorage.getItem("token"))
+                setLikes(res.likes)
+                if(dislikes.includes(window.localStorage.getItem("userid"))) {
+                    // remove dislike if user has disliked post
+                    const res = await commentService
+                        .removeVote(comment, -1, 
+                            window.localStorage.getItem("token"))
+                    setDislikes(res.dislikes)
+                }
+            } catch (err) {
+                console.log("couldn't vote comment")
+            }
         }
     }
     const handleDislike = async () => {
-        try {
-            const res = await commentService
-                .voteComment(comment, -1, window.localStorage.getItem("token"))
-            setDislikes(res.dislikes)
-        } catch (err) {
-            console.log("couldn't vote comment")
+        if(!dislikes.includes(window.localStorage.getItem("userid"))) {
+            try {
+                const res = await commentService
+                    .voteComment(comment, -1, window.localStorage.getItem("token"))
+                setDislikes(res.dislikes)
+                if(likes.includes(window.localStorage.getItem("userid"))) {
+                    // remove like if user has liked post
+                    const res = await commentService
+                        .removeVote(comment, 1, 
+                            window.localStorage.getItem("token"))
+                    setLikes(res.likes)
+                }
+            } catch (err) {
+                console.log("couldn't vote comment")
+            }
         }
+        
     }
 
     // TODO clean this vvv and make replies under replies
@@ -128,23 +147,41 @@ const Post = () => {
     }, [])
 
     const handleLike = async () => {
-        try {
-            const res = await postsService
-                .votePost(post._id, 1, window.localStorage.getItem("token"))
-            setLikes(res.likes)
-        } catch (err) {
-            console.log("couldn't vote post")
+        if(!likes.includes(window.localStorage.getItem("userid"))) {
+            try {
+                const res = await postsService
+                    .votePost(post._id, 1, window.localStorage.getItem("token"))
+                setLikes(res.likes)
+                if(dislikes.includes(window.localStorage.getItem("userid"))) {
+                    // remove dislike if user has disliked
+                    const res = await postsService
+                        .removeVote(post._id, -1, 
+                            window.localStorage.getItem("token"))
+                    setDislikes(res.dislikes)
+                }
+            } catch (err) {
+                console.log("couldn't vote post")
+            }
         }
-        
     }
     const handleDislike = async () => {
-        try {
-            const res = await postsService
-                .votePost(post._id, -1, window.localStorage.getItem("token"))
-            setDislikes(res.dislikes)
-        } catch (err) {
-            console.log("couldn't vote post")
+        if(!dislikes.includes(window.localStorage.getItem("userid"))) {
+            try {
+                const res = await postsService
+                    .votePost(post._id, -1, window.localStorage.getItem("token"))
+                setDislikes(res.dislikes)
+                if(likes.includes(window.localStorage.getItem("userid"))) {
+                    // remove like if user has liked
+                    const res = await postsService
+                        .removeVote(post._id, 1, 
+                            window.localStorage.getItem("token"))
+                    setLikes(res.likes)
+                }
+            } catch (err) {
+                console.log("couldn't vote post")
+            }
         }
+        
     }
 
     if(post) {

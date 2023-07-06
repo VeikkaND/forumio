@@ -10,6 +10,16 @@ const voteComment = async (comment, vote, token) => {
     return res.data
 }
 
+const removeVote = async (comment, vote, token) => {
+    const res = await axios
+        .put(`/api/comments/${comment._id}/remove`, {vote: vote}, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+    return res.data
+}
+
 const getAllCommentsOfPost = async (postId) => {
     const res = await axios.get(`/api/comments/${postId}/all`)
     return res.data
@@ -29,4 +39,10 @@ const postComment = async (comment, token, postId) => {
     })
 }
 
-export default {voteComment, getAllCommentsOfPost, getPost, postComment}
+export default {
+    voteComment, 
+    removeVote, 
+    getAllCommentsOfPost, 
+    getPost, 
+    postComment
+}

@@ -35,7 +35,7 @@ router.get("/login", async (req, res) => {
             if(result === true) {
                 // return token
                 const token = jwt.sign({user: user}, process.env.SECRET)
-                res.send(token).status(200)
+                res.json({token: token, userId: user._id}).status(200)
             } else {
                 res.send(false).status(401)
             }

@@ -13,6 +13,14 @@ const votePost = async (id, vote, token) => {
     })
     return res.data
 }
+const removeVote = async (id, vote, token) => {
+    const res = await axios.put(`/api/posts/${id}/remove`, {vote: vote}, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    return res.data
+}
 
 const newPost = async (post, token) => {
     const config = {
@@ -22,4 +30,9 @@ const newPost = async (post, token) => {
     return res.data
 }
 
-export default {getAllPostsOfSubforum, votePost, newPost}
+export default {
+    getAllPostsOfSubforum, 
+    votePost, 
+    removeVote, 
+    newPost
+}

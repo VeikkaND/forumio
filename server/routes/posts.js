@@ -65,7 +65,7 @@ router.post("/", async (req, res) => {
     
 })
 
-// add/remove likes to post
+// add/remove votes to post
 router.put("/:id", async (req, res) => {
     try {
         const post = await Post.findById(req.params.id)
@@ -84,6 +84,30 @@ router.put("/:id", async (req, res) => {
         
     } catch (err) {
         res.send("could not vote post").status(400)
+    }
+})
+
+// remove vote from post
+router.put("/:id/remove", async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id)
+        const decodedToken = req.decodedToken
+        if(req.body.vote === 1) {
+            // remove like
+            const newLikes = post.likes
+                .filter(post => !post.equals(decodedToken.user._id))
+            await Post.findByIdAndUpdate(req.params.id, {likes: newLikes})
+            res.json({...post, likes: newLikes}).status(200)
+        } else {
+            // remove dislike
+            const newDislikes = post.dislikes
+                .filter(post => !post.equals(decodedToken.user._id))
+            await Post
+                .findByIdAndUpdate(req.params.id, {dislikes: newDislikes})
+            res.json({...post, dislikes: newDislikes}).status(200)
+        }
+    } catch (err) {
+        res.send("could not remove like from post").status(400)
     }
 })
 

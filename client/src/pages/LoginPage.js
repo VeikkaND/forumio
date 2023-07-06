@@ -15,10 +15,12 @@ const LoginPage = () => {
         }
         const res = await usersService.login(config)
         if(res === false) {
+            // TODO do something here
             console.log("wrong password")
         } else {
             // set token to localStorage
-            window.localStorage.setItem("token", res)
+            window.localStorage.setItem("token", res.token)
+            window.localStorage.setItem("userid", res.userId)
             navigate("/")
         }
         

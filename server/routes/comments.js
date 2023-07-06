@@ -103,7 +103,7 @@ router.delete("/:id", async (req, res) => {
     }
 })
 
-// like comment
+// vote comment
 router.put("/:id", async (req, res) => {
     try {
         const comment = await Comment.findById(req.params.id)
@@ -122,6 +122,30 @@ router.put("/:id", async (req, res) => {
         }
     } catch (err) {
         res.send("could not like comment").status(400)
+    }
+})
+
+// remove a vote from comment
+router.put("/:id/remove", async (req, res) => {
+    try {
+        const comment = await Comment.findById(req.params.id)
+        const decodedToken = req.decodedToken
+        if(req.body.vote === 1) {
+            // remove like
+            const newLikes = comment.likes
+                .filter(comment => !comment.equals(decodedToken.user._id))
+            await Comment.findByIdAndUpdate(req.params.id, {likes: newLikes})
+            res.json({...comment, likes: newLikes}).status(200)
+        } else {
+            // remove dislike
+            const newDislikes = comment.dislikes
+                .filter(comment => !comment.equals(decodedToken.user._id))
+            await Comment
+                .findByIdAndUpdate(req.params.id, {dislikes: newDislikes})
+            res.json({...comment, dislikes: newDislikes}).status(200)
+        }
+    } catch (err) {
+        res.send("could not remove like from comment").status(400)
     }
 })
 
