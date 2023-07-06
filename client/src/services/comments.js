@@ -1,8 +1,12 @@
 import axios from "axios"
 
-const likeComment = async (comment, vote) => {
+const voteComment = async (comment, vote, token) => {
     const res = await axios
-        .put(`/api/comments/${comment._id}`, {vote: vote})
+        .put(`/api/comments/${comment._id}`, {vote: vote}, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
     return res.data
 }
 
@@ -25,4 +29,4 @@ const postComment = async (comment, token, postId) => {
     })
 }
 
-export default {likeComment, getAllCommentsOfPost, getPost, postComment}
+export default {voteComment, getAllCommentsOfPost, getPost, postComment}

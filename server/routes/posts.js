@@ -69,11 +69,21 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
     try {
         const post = await Post.findById(req.params.id)
-        const newLikes = post.likes += req.body.vote
-        await Post.findByIdAndUpdate(req.params.id, {likes: newLikes})
-        res.json({...post, likes: newLikes}).status(200)
+        const decodedToken = req.decodedToken
+        if(req.body.vote === 1) { 
+            // like
+            const newLikes = post.likes.concat(decodedToken.user._id)
+            await Post.findByIdAndUpdate(req.params.id, {likes: newLikes})
+            res.json({...post, likes: newLikes}).status(200)
+        } else { 
+            // dislike
+            const newDislikes = post.dislikes.concat(decodedToken.user._id)
+            await Post.findByIdAndUpdate(req.params.id, {dislikes: newDislikes})
+            res.json({...post, dislikes: newDislikes}).status(200)
+        }
+        
     } catch (err) {
-        res.send("could not like post").status(400)
+        res.send("could not vote post").status(400)
     }
 })
 

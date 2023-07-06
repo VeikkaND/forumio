@@ -6,19 +6,21 @@ import CommentForm from "../components/commentForm"
 
 const Comment = ({comment}) => {
     const [likes, setLikes] = useState(comment.likes)
+    const [dislikes, setDislikes] = useState(comment.dislikes)
     const handleLike = async () => {
         try {
-            const res = await commentService.likeComment(comment, 1)
+            const res = await commentService
+                .voteComment(comment, 1, window.localStorage.getItem("token"))
             setLikes(res.likes)
         } catch (err) {
             console.log("couldn't vote comment")
         }
-        
     }
     const handleDislike = async () => {
         try {
-            const res = await commentService.likeComment(comment, -1)
-            setLikes(res.likes)
+            const res = await commentService
+                .voteComment(comment, -1, window.localStorage.getItem("token"))
+            setDislikes(res.dislikes)
         } catch (err) {
             console.log("couldn't vote comment")
         }
@@ -37,7 +39,7 @@ const Comment = ({comment}) => {
                 {comment.author_name} &nbsp; comment id: {comment._id} <br/>
                 parent comment: {comment.parent} <br/>
                 <p>{comment.content}</p>
-                {likes} likes &nbsp;
+                {likes.length - dislikes.length} likes &nbsp;
                 <button onClick={handleLike}>like</button>
                 <button onClick={handleDislike}>dislike</button>
             </div>
@@ -47,7 +49,7 @@ const Comment = ({comment}) => {
         <div style={tempStyle}>
             {comment.author_name} &nbsp; comment id: {comment._id} <br/>
             <p>{comment.content}</p>
-            {likes} likes &nbsp;
+            {likes.length - dislikes.length} likes &nbsp;
             <button onClick={handleLike}>like</button>
             <button onClick={handleDislike}>dislike</button>
         </div>
@@ -77,7 +79,7 @@ const Comments = ({postId}) => {
         async function getAllComments() {
             const data = await commentService.getAllCommentsOfPost(postId)
             const comments = data.sort((a , b) => {
-                return b.likes - a.likes
+                return b.likes.length - a.likes.length
             })
             const parentComments = comments.filter(comment => !comment.parent)
             const replyComments = comments.filter(comment => comment.parent)
@@ -112,20 +114,23 @@ const Comments = ({postId}) => {
 const Post = () => {
     const {subforum, id} = useParams()
     const [post, setPost] = useState(null)
-    const [likes, setLikes] = useState(0)
+    const [likes, setLikes] = useState([])
+    const [dislikes, setDislikes] = useState([])
 
     useEffect(() => {
         async function getPost() {
             const post = await commentService.getPost(id)
             setPost(post)
             setLikes(post.likes)
+            setDislikes(post.dislikes)
         }
         getPost()
     }, [])
 
     const handleLike = async () => {
         try {
-            const res = await postsService.likePost(post._id, 1)
+            const res = await postsService
+                .votePost(post._id, 1, window.localStorage.getItem("token"))
             setLikes(res.likes)
         } catch (err) {
             console.log("couldn't vote post")
@@ -134,8 +139,9 @@ const Post = () => {
     }
     const handleDislike = async () => {
         try {
-            const res = await postsService.likePost(post._id, -1)
-            setLikes(res.likes)
+            const res = await postsService
+                .votePost(post._id, -1, window.localStorage.getItem("token"))
+            setDislikes(res.dislikes)
         } catch (err) {
             console.log("couldn't vote post")
         }
@@ -148,7 +154,7 @@ const Post = () => {
                 <h2>{post.title}</h2>
                 by {post.author_name}
                 <p>{post.content}</p>
-                {likes} likes &nbsp; 
+                {likes.length - dislikes.length} likes &nbsp; 
                 <button onClick={handleLike}>like</button>
                 <button onClick={handleDislike}>dislike</button>
                 <h4>comments</h4>

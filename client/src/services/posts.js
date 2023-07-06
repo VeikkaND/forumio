@@ -5,8 +5,12 @@ const getAllPostsOfSubforum = async (subforum) => {
     return res.data
 }
 
-const likePost = async (id, vote) => {
-    const res = await axios.put(`/api/posts/${id}`, {vote: vote})
+const votePost = async (id, vote, token) => {
+    const res = await axios.put(`/api/posts/${id}`, {vote: vote}, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        } 
+    })
     return res.data
 }
 
@@ -18,4 +22,4 @@ const newPost = async (post, token) => {
     return res.data
 }
 
-export default {getAllPostsOfSubforum, likePost, newPost}
+export default {getAllPostsOfSubforum, votePost, newPost}

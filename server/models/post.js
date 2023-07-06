@@ -4,7 +4,12 @@ const Schema = mongoose.Schema
 const postSchema = new Schema({
     title: String,
     content: String,
-    likes: {type: Number, default: 0},
+    likes: [
+        {type: mongoose.Types.ObjectId, ref: "User"}
+    ],
+    dislikes: [
+        {type: mongoose.Types.ObjectId, ref: "User"}
+    ],
     author: {type: mongoose.Types.ObjectId, ref: "User"},
     author_name: String,
     subforum: {type: mongoose.Types.ObjectId, ref: "Subforum"},

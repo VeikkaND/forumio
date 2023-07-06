@@ -9,7 +9,7 @@ const Post = ({post, subforum}) => {
         <div>
             <Link to={`/${subforum}/${post._id}`}>{post.title}</Link>
             <br/>
-            &nbsp; likes: {post.likes} &nbsp; comments: {post.replies.length}
+            &nbsp; likes: {post.likes.length - post.dislikes.length} &nbsp; comments: {post.replies.length}
         </div>
     )
 }
