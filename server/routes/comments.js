@@ -93,6 +93,7 @@ router.delete("/:id", async (req, res) => {
                 await Comment.findByIdAndUpdate(parentComment._id, 
                     {replies: newParentReplies})
             }
+            // TODO remove all chain comments under deleted comment maybe?
             // TODO remove comments from users comments array in DB
             res.send("comment deleted").status(204)
         } else {

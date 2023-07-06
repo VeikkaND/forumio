@@ -12,16 +12,20 @@ const Comments = ({postId}) => {
 
     const replyRecursion = (
         reply, parentComment, orderedComments, replyComments) => {
-        
-        if(typeof(reply) === "string") {
+        if(typeof(reply) === "string") { 
             reply = replyComments.find(r => r._id === reply)
         }
-        reply.depth = depth
+        if(!parentComment.depth) {
+            // set to default depth if no parent
+            reply.depth = depth
+        } else {
+            // set depth to parents + 1
+            reply.depth = parentComment.depth + 1
+        }
+        
         orderedComments.push(reply)
-        //depth += 1
         if(reply.replies.length !== 0) {
             // go through replies and call replyRecursion if reply has replies
-            depth += 1
             reply.replies.forEach(r => {
                 replyRecursion(r, reply, orderedComments, replyComments)
             })
