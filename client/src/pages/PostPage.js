@@ -12,17 +12,20 @@ const Comments = ({postId}) => {
 
     const replyRecursion = (
         reply, parentComment, orderedComments, replyComments) => {
+        
         if(typeof(reply) === "string") {
             reply = replyComments.find(r => r._id === reply)
         }
         reply.depth = depth
         orderedComments.push(reply)
+        //depth += 1
         if(reply.replies.length !== 0) {
+            // go through replies and call replyRecursion if reply has replies
+            depth += 1
             reply.replies.forEach(r => {
-                depth += 1
                 replyRecursion(r, reply, orderedComments, replyComments)
             })
-        }
+        } 
     }
 
     useEffect(() => {
