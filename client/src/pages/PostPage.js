@@ -1,5 +1,6 @@
 import { Link, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import commentService from "../services/comments"
 import postsService from "../services/posts"
 import CommentForm from "../components/commentForm"
@@ -66,6 +67,8 @@ const Post = () => {
     const [likes, setLikes] = useState([])
     const [dislikes, setDislikes] = useState([])
 
+    const navigate = useNavigate()
+
     useEffect(() => {
         async function getPost() {
             const post = await commentService.getPost(id)
@@ -111,24 +114,49 @@ const Post = () => {
                 console.log("couldn't vote post")
             }
         }
-        
+    }
+
+    const handleDelete = async () => {
+        const res = await postsService
+            .deletePost(post._id, window.localStorage.getItem("token"))
+        navigate(`/${subforum}`)
     }
 
     if(post) {
-        return (
-            <div>
-                <Link to={`/${subforum}`}>return to {subforum}</Link>
-                <h2>{post.title}</h2>
-                by {post.author_name}
-                <p>{post.content}</p>
-                {likes.length - dislikes.length} likes &nbsp; 
-                <button onClick={handleLike}>like</button>
-                <button onClick={handleDislike}>dislike</button>
-                <h4>comments</h4>
-                <CommentForm postId={post._id}/>
-                <Comments postId={post._id}/>
-            </div>
-        )
+        if(post.author === window.localStorage.getItem("userid")) {
+            // user is the author of post
+            return (
+                <div>
+                    <Link to={`/${subforum}`}>return to {subforum}</Link>
+                    <h2>{post.title}</h2>
+                    by {post.author_name}
+                    <p>{post.content}</p>
+                    {likes.length - dislikes.length} likes &nbsp; 
+                    <button onClick={handleLike}>like</button>
+                    <button onClick={handleDislike}>dislike</button>
+                    <button onClick={handleDelete}>remove</button>
+                    <h4>comments</h4>
+                    <CommentForm postId={post._id}/>
+                    <Comments postId={post._id}/>
+                </div>
+            )
+        } else {
+            // user is not the author of post
+            return (
+                <div>
+                    <Link to={`/${subforum}`}>return to {subforum}</Link>
+                    <h2>{post.title}</h2>
+                    by {post.author_name}
+                    <p>{post.content}</p>
+                    {likes.length - dislikes.length} likes &nbsp; 
+                    <button onClick={handleLike}>like</button>
+                    <button onClick={handleDislike}>dislike</button>
+                    <h4>comments</h4>
+                    <CommentForm postId={post._id}/>
+                    <Comments postId={post._id}/>
+                </div>
+            )
+        }
     }
     return (
         <div>

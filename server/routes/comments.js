@@ -94,6 +94,7 @@ router.delete("/:id", async (req, res) => {
                 await Comment.findByIdAndUpdate(parentComment._id, 
                     {replies: newParentReplies})
             }
+            // TODO remove comments from users comments array in DB
             res.send("comment deleted").status(204)
         } else {
             res.send("comment not found").status(404)

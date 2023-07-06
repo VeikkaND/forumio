@@ -23,10 +23,20 @@ const removeVote = async (id, vote, token) => {
 }
 
 const newPost = async (post, token) => {
-    const config = {
-        headers: {"Authorization": `Bearer ${token}`}
-    }
-    const res = await axios.post(`api/posts`, post, config)
+    const res = await axios.post(`/api/posts`, post, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    return res.data
+}
+
+const deletePost = async (postId, token) => {
+    const res = await axios.delete(`/api/posts/${postId}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
     return res.data
 }
 
@@ -34,5 +44,6 @@ export default {
     getAllPostsOfSubforum, 
     votePost, 
     removeVote, 
-    newPost
+    newPost,
+    deletePost
 }

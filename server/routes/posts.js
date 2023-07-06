@@ -34,10 +34,18 @@ router.get("/:subforum/all", async (req, res) => {
 
 // delete post with id
 router.delete("/:id", async (req, res) => {
+    const decodedToken = req.decodedToken
     try {
-        await Post.findByIdAndDelete(req.params.id)
-        await Comment.deleteMany({post: req.params.id})
-        res.send("post deleted").status(204)
+        const post = await Post.findById(req.params.id)
+        if(decodedToken.user.username === post.author_name) {
+            await Post.findByIdAndDelete(req.params.id)
+            await Comment.deleteMany({post: req.params.id})
+            // TODO remove post from users posts array in DB
+            res.send("post deleted").status(204)
+        } else {
+            res.send("can't delete").status(400)
+        }
+        
     } catch (err) {
         res.send("user not found").status(404)
     }
@@ -58,6 +66,7 @@ router.post("/", async (req, res) => {
     })
     try {
         newPost.save()
+        // TODO add post to users posts array in DB
         res.json(newPost).status(201)
     } catch (err) {
         res.send("something went wrong").status(400)
