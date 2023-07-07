@@ -9,10 +9,21 @@ router.get("/", async (req, res) => {
     res.json(users)
 })
 
+router.get("/user/:username", async (req, res) => {
+    const user = await User.findOne({username: req.params.username})
+    if(user) {
+        res.json(user).status(200)
+    } else {
+        res.send("user not found").status(404)
+    }
+    
+})
+
 router.post("/", async (req, res) => {
     const request = req.body
     const newUser = new User({
-        username: request.username
+        username: request.username,
+        creationDate: req.timestamp
     })
     
     try {
