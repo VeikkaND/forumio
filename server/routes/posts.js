@@ -2,6 +2,7 @@ const router = require("express").Router()
 const Post = require("../models/post")
 const Subforum = require("../models/subforum")
 const Comment = require("../models/comment")
+const User = require("../models/user")
 
 // get all posts
 router.get("/", async (req, res) => {
@@ -40,7 +41,11 @@ router.delete("/:id", async (req, res) => {
         if(decodedToken.user.username === post.author_name) {
             await Post.findByIdAndDelete(req.params.id)
             await Comment.deleteMany({post: req.params.id})
-            // TODO remove post from users posts array in DB
+
+            // remove post from users in DB
+            const user = await User.findById(decodedToken.user._id)
+            const newPosts = user.posts.filter(p => !p.equals(post._id))
+            await User.findByIdAndUpdate(decodedToken.user._id, {posts: newPosts})
             res.send("post deleted").status(204)
         } else {
             res.send("can't delete").status(400)
@@ -65,8 +70,12 @@ router.post("/", async (req, res) => {
         subforum: subforum._id
     })
     try {
-        newPost.save()
-        // TODO add post to users posts array in DB
+        await newPost.save()
+
+        // add post to users in DB
+        const user = await User.findById(decodedToken.user._id)
+        const newPosts = user.posts.concat(newPost)
+        await User.findByIdAndUpdate(user._id, {posts: newPosts})
         res.json(newPost).status(201)
     } catch (err) {
         res.send("something went wrong").status(400)

@@ -2,6 +2,7 @@ const router = require("express").Router()
 require("dotenv").config()
 const Comment = require("../models/comment")
 const Post = require("../models/post")
+const User = require("../models/user")
 const jwt = require("jsonwebtoken")
 const { populate } = require("../models/subforum")
 
@@ -38,11 +39,12 @@ router.get("/:postid/all", async (req, res) => {
 router.post("/", async (req, res) => {
     const comment = req.body.comment
     const postId = req.body.postId
+    const decodedToken = req.decodedToken
     if(!req.body.parent) { // comment is a reply to a post
         var newComment = new Comment({
             content: comment,
-            author: req.decodedToken.user.id,
-            author_name: req.decodedToken.user.username,
+            author: decodedToken.user.id,
+            author_name: decodedToken.user.username,
             post: postId
         })
         const post = await Post.findById(newComment.post)
@@ -52,8 +54,8 @@ router.post("/", async (req, res) => {
         const parent = req.body.parent
         var newComment = new Comment({
             content: comment,
-            author: req.decodedToken.user.id,
-            author_name: req.decodedToken.user.username,
+            author: decodedToken.user.id,
+            author_name: decodedToken.user.username,
             post: postId,
             parent: parent
         })
@@ -66,7 +68,13 @@ router.post("/", async (req, res) => {
         await Post.findByIdAndUpdate(newComment.post, {replies: newPostReplies})
     }
     try {
-        newComment.save()
+        await newComment.save()
+
+        // add comments to users in DB
+        const user = await User.findById(decodedToken.user._id)
+        const newComments = user.comments.concat(newComment)
+        await User
+            .findByIdAndUpdate(decodedToken.user._id, {comments: newComments})
         res.send(newComment).status(201)
     } catch (err) {
         res.send("something went wrong").status(400)
@@ -94,7 +102,12 @@ router.delete("/:id", async (req, res) => {
                     {replies: newParentReplies})
             }
             // TODO remove all chain comments under deleted comment maybe?
-            // TODO remove comments from users comments array in DB
+            
+            // remove comment from users in DB
+            const user = await User.findById(decodedToken.user._id)
+            const newComments= user.comments.filter(c => !c.equals(comment._id))
+            await User
+                .findByIdAndUpdate(decodedToken.user._id, {comments: newComments})
             res.send("comment deleted").status(204)
         } else {
             res.send("comment not found").status(404)
