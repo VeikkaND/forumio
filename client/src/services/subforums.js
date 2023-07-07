@@ -1,9 +1,7 @@
 import axios from "axios"
 
-const API_URL = "http://localhost:3000/api/subforums" 
-
 const getSubforums = async () => {
-    const res = await axios.get(API_URL)
+    const res = await axios.get("/api/subforums" )
     const subforumsData = res.data
     let subforums = []
     subforumsData.forEach(sub => {
@@ -17,4 +15,27 @@ const getSubforums = async () => {
     return subforums
 }
 
-export default {getSubforums}
+const getSubforum = async (name) => {
+    const res = await axios.get(`/api/subforums/${name}`)
+    return res.data
+}
+
+const newSubforum = async (subforum, token) => {
+    const res = await axios.post("/api/subforums", subforum, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    return res.data
+}
+
+const deleteSubforum = async (name, token) => {
+    const res = await axios.delete(`/api/subforums/${name}`, {
+        headers:{
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    return res.data
+}
+
+export default {getSubforums, getSubforum, newSubforum, deleteSubforum}

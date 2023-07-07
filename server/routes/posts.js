@@ -75,8 +75,13 @@ router.post("/", async (req, res) => {
 
         // add post to users in DB
         const user = await User.findById(decodedToken.user._id)
-        const newPosts = user.posts.concat(newPost)
-        await User.findByIdAndUpdate(user._id, {posts: newPosts})
+        const newUserPosts = user.posts.concat(newPost)
+        await User.findByIdAndUpdate(user._id, {posts: newUserPosts})
+
+        // add post to subforum in DB
+        const newSubPosts = subforum.posts.concat(newPost._id) 
+        await Subforum.findByIdAndUpdate(subforum._id, {posts: newSubPosts})
+
         res.json(newPost).status(201)
     } catch (err) {
         res.send("something went wrong").status(400)

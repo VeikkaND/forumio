@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
     if(!req.body.parent) { // comment is a reply to a post
         var newComment = new Comment({
             content: comment,
-            author: decodedToken.user.id,
+            author: decodedToken.user._id,
             author_name: decodedToken.user.username,
             post: postId,
             date: req.timestamp
@@ -55,7 +55,7 @@ router.post("/", async (req, res) => {
         const parent = req.body.parent
         var newComment = new Comment({
             content: comment,
-            author: decodedToken.user.id,
+            author: decodedToken.user._id,
             author_name: decodedToken.user.username,
             post: postId,
             parent: parent,
