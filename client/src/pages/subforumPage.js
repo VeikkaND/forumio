@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import postsService from "../services/posts"
 import subforumsService from "../services/subforums"
 import Popup from "reactjs-popup"
+import { formatToDays } from "../util/util"
 
 const Post = ({post, subforum}) => {
     return (
@@ -24,14 +25,16 @@ const InfoBox = ({mod, subforumInfo}) => {
     if(mod) {
         return (
             <div>
-                some info here <br/>
+                {subforumInfo.description} <br/>
+                created on: {formatToDays(subforumInfo.creationDate)} <br/>
                 <button onClick={handleRedirect}>settings</button>
             </div>
         )
     }
     return (
         <div>
-            some info here
+            {subforumInfo.description} <br/>
+            created on: {formatToDays(subforumInfo.creationDate)} <br/>
         </div>
     )
 }

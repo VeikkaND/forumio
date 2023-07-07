@@ -18,7 +18,7 @@ const SubforumSettingsPage = () => {
     })
 
     const handleDelete = async () => {
-        // TODO fix delted sub still showing on homepage
+        // TODO fix delted sub still showing on homepage sometimes
         navigate("/")
         const res = await subforumsService
             .deleteSubforum(subforum, window.localStorage.getItem("token"))

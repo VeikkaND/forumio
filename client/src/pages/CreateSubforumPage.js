@@ -12,7 +12,6 @@ const CreateSubforumPage = () => {
 
         const res = await subforumsService
             .newSubforum(subforum, window.localStorage.getItem("token"))
-        console.log(res)
     }
 
     return (
