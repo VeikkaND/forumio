@@ -5,6 +5,7 @@ import commentService from "../services/comments"
 import postsService from "../services/posts"
 import CommentForm from "../components/commentForm"
 import Comment from "../components/comment"
+import { dateFormatter } from "../util/util"
 
 const Comments = ({postId}) => {
     const [comments, setComments] = useState([])
@@ -136,7 +137,7 @@ const Post = () => {
                 <div>
                     <Link to={`/${subforum}`}>return to {subforum}</Link>
                     <h2>{post.title}</h2>
-                    by {post.author_name}
+                    by {post.author_name} {dateFormatter(post.date)}
                     <p>{post.content}</p>
                     {likes.length - dislikes.length} likes &nbsp; 
                     <button onClick={handleLike}>like</button>
@@ -153,7 +154,7 @@ const Post = () => {
                 <div>
                     <Link to={`/${subforum}`}>return to {subforum}</Link>
                     <h2>{post.title}</h2>
-                    by {post.author_name}
+                    by {post.author_name} {dateFormatter(post.date)}
                     <p>{post.content}</p>
                     {likes.length - dislikes.length} likes &nbsp; 
                     <button onClick={handleLike}>like</button>

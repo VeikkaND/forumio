@@ -1,5 +1,6 @@
 import commentService from "../services/comments"
 import { useState } from "react"
+import { dateFormatter } from "../util/util"
 
 const ReplyForm = ({parentId, postId}) => {
     const [replyOpened, setReplyOpened] = useState(false)
@@ -101,7 +102,8 @@ const Comment = ({comment}) => {
             // user is the comment author
             return (
                 <div style={replyStyle}>
-                    {comment.author_name} &nbsp; comment id: {comment._id} <br/>
+                    {comment.author_name} {dateFormatter(comment.date)} &nbsp; 
+                    comment id: {comment._id} <br/>
                     parent comment: {comment.parent} <br/>
                     <p>{comment.content}</p>
                     {likes.length - dislikes.length} likes &nbsp;
@@ -116,7 +118,8 @@ const Comment = ({comment}) => {
             // user is not the comment author
             return (
                 <div style={replyStyle}>
-                    {comment.author_name} &nbsp; comment id: {comment._id} <br/>
+                    {comment.author_name} {dateFormatter(comment.date)} &nbsp; 
+                    comment id: {comment._id} <br/>
                     parent comment: {comment.parent} <br/>
                     <p>{comment.content}</p>
                     {likes.length - dislikes.length} likes &nbsp;
@@ -133,7 +136,8 @@ const Comment = ({comment}) => {
             // user is the comment author
             return (
                 <div style={tempStyle}>
-                    {comment.author_name} &nbsp; comment id: {comment._id} <br/>
+                    {comment.author_name} {dateFormatter(comment.date)} &nbsp; 
+                    comment id: {comment._id} <br/>
                     <p>{comment.content}</p>
                     {likes.length - dislikes.length} likes &nbsp;
                     <button onClick={handleLike}>like</button>
@@ -147,7 +151,8 @@ const Comment = ({comment}) => {
             // user is not the comment author
             return (
                 <div style={tempStyle}>
-                    {comment.author_name} &nbsp; comment id: {comment._id} <br/>
+                    {comment.author_name} {dateFormatter(comment.date)} &nbsp; 
+                    comment id: {comment._id} <br/>
                     <p>{comment.content}</p>
                     {likes.length - dislikes.length} likes &nbsp;
                     <button onClick={handleLike}>like</button>

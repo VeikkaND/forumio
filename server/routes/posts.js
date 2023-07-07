@@ -67,7 +67,8 @@ router.post("/", async (req, res) => {
         content: request.content,
         author: decodedToken.user._id,
         author_name: decodedToken.user.username,
-        subforum: subforum._id
+        subforum: subforum._id,
+        date: req.timestamp
     })
     try {
         await newPost.save()

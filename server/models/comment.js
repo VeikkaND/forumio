@@ -9,7 +9,8 @@ const commentSchema = new Schema({
     dislikes: [{type: mongoose.Types.ObjectId, ref: "User"}],
     post: {type: mongoose.Types.ObjectId, ref: "Post"},
     parent: {type: mongoose.Types.ObjectId, ref: "Comment"},
-    replies: [{type: mongoose.Types.ObjectId, ref: "Comment"}]
+    replies: [{type: mongoose.Types.ObjectId, ref: "Comment"}],
+    date: Date
 })
 
 const Comment = mongoose.model("Comment", commentSchema)

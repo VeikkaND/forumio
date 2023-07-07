@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom"
 import usersService from "../services/user"
 import { useEffect, useState } from "react"
+import { dateFormatter } from "../util/util"
 
 const UserPage = () => {
     const {username} = useParams() 
@@ -20,7 +21,7 @@ const UserPage = () => {
                 <h2>{user.username}</h2>
                 posts: {user.posts.length} <br/>
                 comments: {user.comments.length} <br/>
-                account created on: {user.creationDate} <br/>
+                account created on: {dateFormatter(user.creationDate)} <br/>
             </div>
         )
     } 

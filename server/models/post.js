@@ -13,7 +13,8 @@ const postSchema = new Schema({
     author: {type: mongoose.Types.ObjectId, ref: "User"},
     author_name: String,
     subforum: {type: mongoose.Types.ObjectId, ref: "Subforum"},
-    replies: [{type: mongoose.Types.ObjectId, ref: "Comment"}]
+    replies: [{type: mongoose.Types.ObjectId, ref: "Comment"}],
+    date: Date
 })
 
 const Post = mongoose.model("Post", postSchema)

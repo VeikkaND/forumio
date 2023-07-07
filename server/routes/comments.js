@@ -45,7 +45,8 @@ router.post("/", async (req, res) => {
             content: comment,
             author: decodedToken.user.id,
             author_name: decodedToken.user.username,
-            post: postId
+            post: postId,
+            date: req.timestamp
         })
         const post = await Post.findById(newComment.post)
         const newReplies = post.replies.concat(newComment._id)
@@ -57,7 +58,8 @@ router.post("/", async (req, res) => {
             author: decodedToken.user.id,
             author_name: decodedToken.user.username,
             post: postId,
-            parent: parent
+            parent: parent,
+            date: req.timestamp
         })
         const parentComment = await Comment.findById(parent)
         const newReplies = parentComment.replies.concat(newComment._id)
