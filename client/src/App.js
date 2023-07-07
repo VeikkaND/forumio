@@ -5,18 +5,20 @@ import Home from "./pages/HomePage";
 import Post from "./pages/PostPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import UserPage from "./pages/UserPage";
 
 function App() {
 
   return (
     <BrowserRouter>
-      <Navbar user={window.localStorage.getItem("token")}/>
+      <Navbar />
       <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/:subforum" element={<SubforumPage />}></Route>
           <Route path="/:subforum/:id" element={<Post />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
           <Route path="/register" element={<RegisterPage />}></Route>
+          <Route path="/user/:username" element={<UserPage />}></Route>
       </Routes>
     </BrowserRouter>
     

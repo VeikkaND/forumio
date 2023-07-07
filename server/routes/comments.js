@@ -101,8 +101,9 @@ router.delete("/:id", async (req, res) => {
                 await Comment.findByIdAndUpdate(parentComment._id, 
                     {replies: newParentReplies})
             }
-            // TODO remove all chain comments under deleted comment maybe?
-            
+            // TODO do something about replies not being deleted from DB
+            // if parent comment gets deleted 
+
             // remove comment from users in DB
             const user = await User.findById(decodedToken.user._id)
             const newComments= user.comments.filter(c => !c.equals(comment._id))

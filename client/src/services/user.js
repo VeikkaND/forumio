@@ -10,4 +10,9 @@ const register = async (user) => {
     return res.data
 }
 
-export default {login, register}
+const getUser = async (username) => {
+    const res = await axios.get(`/api/users/user/${username}`)
+    return res.data
+}
+
+export default {login, register, getUser}

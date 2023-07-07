@@ -18,11 +18,11 @@ const LoginPage = () => {
             // TODO do something here
             console.log("wrong password")
         } else {
-            // set token to localStorage
             window.localStorage.setItem("token", res.token)
             window.localStorage.setItem("userid", res.userId)
             window.localStorage.setItem("username", res.username)
             navigate("/")
+            window.location.reload(false)
         }
         
     }
