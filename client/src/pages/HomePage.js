@@ -20,10 +20,12 @@ const Home = () => {
     }
 
     return (
-        <div>
+        <div className="homepage">
             <button onClick={handleRedirect}>create new subforum</button>
-            {subforums.map(sub => <Subforum name={sub.name} users={sub.users} 
-            key={sub.id}/>)}
+            <div className="subforums">
+                {subforums.map(sub => <Subforum name={sub.name} users={sub.users} 
+                key={sub.id}/>)}
+            </div>
         </div>
     )
 }

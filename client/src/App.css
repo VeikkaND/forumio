@@ -51,38 +51,152 @@ body {
     background-color: #146C94;
 }
 
+.navbar #io {
+    color: black;
+}
+
+/* || home page */
+
+.homepage {
+
+}
+
+.subforums {
+    display: flex;
+}
+
+.subforum {
+    border: 2px solid;
+    border-radius: 10px;
+    width: 50%;
+    background-color: #F6F1F1;
+    margin: 5px;
+    padding-left: 20px;
+    padding-top: 10px;
+}
+
+.subforum #sublink {
+    text-decoration: none;
+    font-size: 25px;
+    font-weight: bold;
+    color: black;
+}
+
+.subforum p {
+    font-size: 14px;
+}
 
 /* || subforum page */
 
 .subforumpage {
     display: flex;
+    margin-left: 5px;
 }
 
-.info {
+.subforumpage .info {
     border-left: solid 2px;
     border-bottom: solid 2px;
     border-bottom-left-radius: 10px;
-    margin-left: 5px;
+    
     padding: 10px;
     width: 30%;
 }
 
-.info h2 {
+.subforumpage .info h2 {
     border-bottom: 2px solid;
     padding-bottom: 10px;
     max-width:fit-content
 }
 
-.posts {
+.subforumpage .posts {
     width: 70%;
 }
 
-.post {
+.subforumpage .post {
     background-color: #F6F1F1;
     padding: 10px 10px;
     margin-bottom: 5px;
     margin-top: 5px;
-    margin-left: 5px;
     border-radius: 10px;
 }
 
+/* || post page */
+
+.postpage {
+    margin: 5px;
+}
+
+.postpage .post {
+    background-color: #F6F1F1;
+    padding: 10px;
+    padding-top: 1px;
+}
+
+.commentform {
+    display: flex;
+}
+
+.commentform textarea {
+    width: 75%;
+    overflow: visible;
+}
+
+.commentform button {
+    height: 40px;
+    margin-left: 0;
+    margin-top: auto;
+    padding: 10px;
+    background-color:#F6F1F1;
+    border: 1px solid;
+    border-radius: 5px;
+}
+
+.commentform button:hover {
+    transition-duration: 0.4s;
+    background-color: bisque;
+}
+
+/* || user page */
+
+.userpage {
+    margin-left: 10px;
+}
+
+.userpage td {
+    padding: 5px;
+    padding-left: 0;
+}
+
+/* || login page */
+
+.loginpage {
+    text-align: center;
+}
+
+.loginpage table {
+    margin: auto;
+}
+
+.loginpage input:focus {
+    transition-duration: 0.2s;
+    background-color: antiquewhite;
+}
+
+.loginpage button {
+    padding: 10px 25px;
+    border-radius: 10px;
+    border: 1px;
+}
+
+.loginpage button:hover {
+    transition-duration: 0.4s;
+    background-color:antiquewhite;
+}
+
+.loginpage a {
+    text-decoration: none;
+}
+
+.loginpage a:hover {
+    background-color: antiquewhite;
+}

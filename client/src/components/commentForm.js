@@ -19,8 +19,8 @@ const CommentForm = ({postId}) => {
     }
 
     return (
-        <div>
-            <textarea onChange={handleInput}/>
+        <div className="commentform">
+            <textarea onChange={handleInput} rows={4}/>
             <button onClick={handleSubmit}>send</button>
         </div>
     )

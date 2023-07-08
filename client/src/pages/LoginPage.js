@@ -27,15 +27,29 @@ const LoginPage = () => {
         
     }
     return (
-        <form onSubmit={handleSubmit}>
-            <p>username</p>
-            <input name="username"></input> <br/>
-            <p>password</p>
-            <input name="password"></input> <br/>
-            <span>Don't have an account? </span> 
-            <a href="/register">register here</a> <br/>
-            <button type="submit">login</button>
-        </form>
+        <div className="loginpage">
+            <h1>Log in</h1>
+            <form onSubmit={handleSubmit}>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Username</td>
+                            <td><input name="username"></input></td>
+                        </tr>
+                        <tr>
+                            <td>Password</td>
+                            <td><input name="password"></input></td>
+                        </tr>
+                    </tbody>
+                </table>    
+                <p>
+                    <span>Don't have an account? </span> 
+                    <a href="/register">register here</a> <br/>
+                </p>
+                <button type="submit">login</button>
+            </form>
+        </div>
+        
     )
 }
 

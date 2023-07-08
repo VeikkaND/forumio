@@ -17,11 +17,22 @@ const UserPage = () => {
 
     if(user) {
         return (
-            <div>
+            <div className="userpage">
                 <h2>{user.username}</h2>
-                posts: {user.posts.length} <br/>
-                comments: {user.comments.length} <br/>
-                account created on: {dateFormatter(user.creationDate)} <br/>
+                <p>account created on: {dateFormatter(user.creationDate)}</p>
+                <table className="data">
+                    <tbody>
+                        <tr>
+                            <td>Posts</td>
+                            <td>{user.posts.length}</td>
+                        </tr>
+                        <tr>
+                            <td>Comments</td>
+                            <td>{user.comments.length}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
             </div>
         )
     } 

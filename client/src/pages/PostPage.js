@@ -134,15 +134,18 @@ const Post = () => {
         if(post.author === window.localStorage.getItem("userid")) {
             // user is the author of post
             return (
-                <div>
+                <div className="postpage">
                     <Link to={`/${subforum}`}>return to {subforum}</Link>
-                    <h2>{post.title}</h2>
-                    by {post.author_name} {dateFormatter(post.date)}
-                    <p>{post.content}</p>
-                    {likes.length - dislikes.length} likes &nbsp; 
-                    <button onClick={handleLike}>like</button>
-                    <button onClick={handleDislike}>dislike</button>
-                    <button onClick={handleDelete}>remove</button>
+                    <div className="post">
+                        <h2>{post.title}</h2>
+                        by {post.author_name} {dateFormatter(post.date)}
+                        <p>{post.content}</p>
+                        {likes.length - dislikes.length} likes &nbsp; 
+                        <button onClick={handleLike}>like</button>
+                        <button onClick={handleDislike}>dislike</button>
+                        <button onClick={handleDelete}>remove</button>
+                    </div>
+                    
                     <h4>comments</h4>
                     <CommentForm postId={post._id}/>
                     <Comments postId={post._id}/>

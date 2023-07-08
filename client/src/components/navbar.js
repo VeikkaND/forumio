@@ -21,7 +21,10 @@ const Navbar = () => {
         return (
             <div className="navbar">
                 <span>
-                    <Link to={"/"} id="logo">forum.io</Link> &nbsp;
+                    <Link to={"/"} id="logo">
+                        <span id="forum">forum</span>
+                        <span id="io">.io</span>
+                    </Link> 
                 </span>
                 <span id="user">
                     <Link to={`/user/${window.localStorage.getItem("username")}`} 
@@ -37,7 +40,10 @@ const Navbar = () => {
         return (
             <div className="navbar">
                 <span>
-                    <Link to={"/"} id="logo">forum.io</Link> &nbsp;
+                    <Link to={"/"} id="logo">
+                        <span id="forum">forum</span>
+                        <span id="io">.io</span>
+                    </Link> 
                 </span>
                 <span id="user">
                     <button onClick={handlelogin}>log in</button>

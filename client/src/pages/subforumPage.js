@@ -104,21 +104,25 @@ const SubforumPage = () => {
     return (
         // UI with no mod role
         <div className="subforumpage">
-            <h2>{subforum}</h2>
-            <InfoBox mod={false} subforumInfo={subforumInfo}/>
-            <Popup trigger={<button>new post</button>} position={"bottom left"}>
-                <div>
-                    <form onSubmit={handleNewPost}>
-                        <p>Title</p>
-                        <input name="title"></input> <br/>
-                        <p>Content</p>
-                        <textarea name="content"></textarea>
-                        <button type="submit"></button>
-                    </form>
-                </div>
-            </Popup>
-            {posts.map(post => <Post post={post} subforum={subforum} 
-                key={post._id}/>)}
+            <div className="posts">
+                <Popup trigger={<button>new post</button>} position={"bottom left"}>
+                    <div>
+                        <form onSubmit={handleNewPost}>
+                            <p>Title</p>
+                            <input name="title"></input> <br/>
+                            <p>Content</p>
+                            <textarea name="content"></textarea>
+                            <button type="submit"></button>
+                        </form>
+                    </div>
+                </Popup>
+                {posts.map(post => <Post post={post} subforum={subforum} 
+                    key={post._id}/>)}
+            </div>
+            <div className="info">
+                <h2>{subforum}</h2>
+                <InfoBox mod={false} subforumInfo={subforumInfo}/>
+            </div>
         </div>
     )
 }
