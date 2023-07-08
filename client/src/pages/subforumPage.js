@@ -8,7 +8,7 @@ import { formatToDays } from "../util/util"
 
 const Post = ({post, subforum}) => {
     return (
-        <div>
+        <div className="post">
             <Link to={`/${subforum}/${post._id}`}>{post.title}</Link>
             <br/>
             &nbsp; likes: {post.likes.length - post.dislikes.length} &nbsp; comments: {post.replies.length}
@@ -77,22 +77,30 @@ const SubforumPage = () => {
     if(subforumInfo.moderators.includes(window.localStorage.getItem("userid"))) {
         // UI with mod role
         return (
-            <div>
-                <h2>{subforum}</h2>
-                <InfoBox mod={true} subforumInfo={subforumInfo}/>
-                <Popup trigger={<button>new post</button>} position={"bottom left"}>
-                    <div>
-                        <form onSubmit={handleNewPost}>
-                            <p>Title</p>
-                            <input name="title"></input> <br/>
-                            <p>Content</p>
-                            <textarea name="content"></textarea>
-                            <button type="submit"></button>
-                        </form>
+            <div className="subforumpage">
+                <div className="float">
+                    <Popup trigger={<button>new post</button>} position={"bottom left"}>
+                        <div>
+                            <form onSubmit={handleNewPost}>
+                                <p>Title</p>
+                                <input name="title"></input> <br/>
+                                <p>Content</p>
+                                <textarea name="content"></textarea>
+                                <button type="submit"></button>
+                            </form>
+                        </div>
+                    </Popup>
+                    <div className="posts">
+                        {posts.map(post => <Post post={post} subforum={subforum} 
+                            key={post._id}/>)}
                     </div>
-                </Popup>
-                {posts.map(post => <Post post={post} subforum={subforum} 
-                    key={post._id}/>)}
+                </div>
+                <div className="float">
+                    <div className="info">
+                        <h2>{subforum}</h2>
+                        <InfoBox mod={true} subforumInfo={subforumInfo}/>
+                    </div>
+                </div>
             </div>
         )
     }

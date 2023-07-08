@@ -52,3 +52,32 @@ body {
 }
 
 
+/* || subforum page */
+
+.info {
+    padding-left: 20px;
+    padding-bottom: 10%;
+    margin-bottom: 100%;
+    border-left: solid 2px;
+    border-bottom: solid 2px;
+    margin-left: 5px;
+    margin-right: auto;
+}
+
+.float {
+    float: left;
+}
+
+.posts {
+    width: 70vw;
+}
+
+.post {
+    background-color: #F6F1F1;
+    padding: 10px 10px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    margin-left: 5px;
+    border-radius: 10px;
+}
+
