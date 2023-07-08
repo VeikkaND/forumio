@@ -1,0 +1,54 @@
+/* || general */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+}
+
+/* || navbar */
+
+.navbar {
+    background-color: #19A7CE;
+    padding: 20px;
+}
+
+.navbar #user {
+    position: absolute;
+    right: 0px;
+    margin-right: 20px;
+    margin-top: 0px;
+    font-size: 20px;
+}
+
+.navbar #user #userlink {
+    text-decoration: none;
+    color: white;
+    border-right: solid 2px;
+    padding-right: 20px;
+    padding-top: 15px;
+    border-color: white;
+    padding-bottom: 15px;
+}
+
+.navbar #logo{
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+    font-size: 40px;
+}
+
+.navbar button {
+    border-radius: 8px;
+    border: none;
+    background-color: #19A7CE;
+    height: 40px;
+    color: white;
+    font-size: 20px;
+}
+
+.navbar button:hover {
+    transition-duration: 0.4s;
+    background-color: #146C94;
+}
+
+

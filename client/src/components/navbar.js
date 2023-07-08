@@ -19,26 +19,27 @@ const Navbar = () => {
 
     if(username) {
         return (
-            <div>
+            <div className="navbar">
                 <span>
-                    <Link to={"/"}>forum.io</Link> &nbsp;
+                    <Link to={"/"} id="logo">forum.io</Link> &nbsp;
                 </span>
-                <span>
-                    logged in as <strong>{username}</strong> &nbsp;
-                    <Link to={`/user/${window.localStorage.getItem("username")}`}>
-                        user info
-                    </Link>
+                <span id="user">
+                    <Link to={`/user/${window.localStorage.getItem("username")}`} 
+                    id="userlink">
+                        {username}
+                    </Link> &nbsp;
+                    <button onClick={handleLogout}>logout</button>
                 </span>
-                <button onClick={handleLogout}>logout</button>
+                
             </div>
         )
     } else {
         return (
-            <div>
+            <div className="navbar">
                 <span>
-                    <Link to={"/"}>forum.io</Link> &nbsp;
+                    <Link to={"/"} id="logo">forum.io</Link> &nbsp;
                 </span>
-                <span>
+                <span id="user">
                     <button onClick={handlelogin}>log in</button>
                 </span>
             </div>
