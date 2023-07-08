@@ -54,22 +54,27 @@ body {
 
 /* || subforum page */
 
-.info {
-    padding-left: 20px;
-    padding-bottom: 10%;
-    margin-bottom: 100%;
-    border-left: solid 2px;
-    border-bottom: solid 2px;
-    margin-left: 5px;
-    margin-right: auto;
+.subforumpage {
+    display: flex;
 }
 
-.float {
-    float: left;
+.info {
+    border-left: solid 2px;
+    border-bottom: solid 2px;
+    border-bottom-left-radius: 10px;
+    margin-left: 5px;
+    padding: 10px;
+    width: 30%;
+}
+
+.info h2 {
+    border-bottom: 2px solid;
+    padding-bottom: 10px;
+    max-width:fit-content
 }
 
 .posts {
-    width: 70vw;
+    width: 70%;
 }
 
 .post {

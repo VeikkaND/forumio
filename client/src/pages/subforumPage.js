@@ -25,8 +25,8 @@ const InfoBox = ({mod, subforumInfo}) => {
     if(mod) {
         return (
             <div>
-                {subforumInfo.description} <br/>
-                created on: {formatToDays(subforumInfo.creationDate)} <br/>
+                <p>{subforumInfo.description}</p> <br />
+                <p>created on: {formatToDays(subforumInfo.creationDate)} </p>
                 <button onClick={handleRedirect}>settings</button>
             </div>
         )
@@ -78,7 +78,7 @@ const SubforumPage = () => {
         // UI with mod role
         return (
             <div className="subforumpage">
-                <div className="float">
+                <div className="posts">
                     <Popup trigger={<button>new post</button>} position={"bottom left"}>
                         <div>
                             <form onSubmit={handleNewPost}>
@@ -90,24 +90,20 @@ const SubforumPage = () => {
                             </form>
                         </div>
                     </Popup>
-                    <div className="posts">
-                        {posts.map(post => <Post post={post} subforum={subforum} 
-                            key={post._id}/>)}
-                    </div>
+                    {posts.map(post => <Post post={post} subforum={subforum} 
+                        key={post._id}/>)}
                 </div>
-                <div className="float">
-                    <div className="info">
-                        <h2>{subforum}</h2>
-                        <InfoBox mod={true} subforumInfo={subforumInfo}/>
-                    </div>
+                <div className="info">
+                    <h2>{subforum}</h2>
+                    <InfoBox mod={true} subforumInfo={subforumInfo}/>
                 </div>
-            </div>
+        </div>
         )
     }
 
     return (
         // UI with no mod role
-        <div>
+        <div className="subforumpage">
             <h2>{subforum}</h2>
             <InfoBox mod={false} subforumInfo={subforumInfo}/>
             <Popup trigger={<button>new post</button>} position={"bottom left"}>
