@@ -8,6 +8,7 @@ import RegisterPage from "./pages/RegisterPage";
 import UserPage from "./pages/UserPage";
 import CreateSubforumPage from "./pages/CreateSubforumPage";
 import SubforumSettingsPage from "./pages/SubforumSettingsPage";
+import BrowseSubforumsPage from "./pages/BrowseSubforumsPage";
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
       <Navbar />
       <Routes>
           <Route path="/" element={<Home />}></Route>
+          <Route path="/all" element={<BrowseSubforumsPage />}></Route>
           <Route path="/:subforum" element={<SubforumPage />}></Route>
           <Route path="/:subforum/settings" element={<SubforumSettingsPage />}></Route>
           <Route path="/:subforum/:id" element={<Post />}></Route>

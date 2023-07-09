@@ -15,4 +15,13 @@ const getUser = async (username) => {
     return res.data
 }
 
-export default {login, register, getUser}
+const subscribe = async (subforumId, token) => {
+    const res = await axios.put("/api/users", {subforumId}, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    return res.data
+}
+
+export default {login, register, getUser, subscribe}

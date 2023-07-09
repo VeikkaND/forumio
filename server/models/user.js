@@ -11,7 +11,8 @@ const userSchema = new Schema({
     },
     posts: [{type: mongoose.Types.ObjectId, ref: "Post"}],
     comments: [{type: mongoose.Types.ObjectId, ref: "Comment"}],
-    creationDate: Date
+    creationDate: Date,
+    subscriptions: [{type: mongoose.Types.ObjectId, ref: "Subforum"}]
 })
 
 const User = mongoose.model("User", userSchema)

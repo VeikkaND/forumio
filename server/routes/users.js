@@ -4,11 +4,13 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const User = require("../models/user")
 
+// get all users
 router.get("/", async (req, res) => {
     const users = await User.find({})
     res.json(users)
 })
 
+// get user by username
 router.get("/user/:username", async (req, res) => {
     const user = await User.findOne({username: req.params.username})
     if(user) {
@@ -19,6 +21,7 @@ router.get("/user/:username", async (req, res) => {
     
 })
 
+// new user
 router.post("/", async (req, res) => {
     const request = req.body
     const newUser = new User({
@@ -39,6 +42,7 @@ router.post("/", async (req, res) => {
     
 })
 
+// check login details for user
 router.get("/login", async (req, res) => {
     const user = await User.findOne({username: req.headers.username})
     if(user) {
@@ -58,13 +62,47 @@ router.get("/login", async (req, res) => {
     }
 })
 
-router.delete(`/:id`, async (req, res) => {
+// delete user
+router.delete("/:id", async (req, res) => {
     const deleteId = req.params.id
     try {
         await User.findByIdAndDelete(deleteId)
         res.send(`deleted user ${deleteId}`).status(204)
     } catch (err) {
         res.send("User not found").status(400)
+    }
+})
+
+// subscribe/unsubscribe user from subforums
+router.put("/", async (req, res) => {
+    const subforumId = req.body.subforumId
+    const decodedToken = req.decodedToken
+    const user = await User.findById(decodedToken.user._id)
+    try {
+        if(user) {
+            if(user.subscriptions.includes(subforumId)) {
+                // unsubscribe from subforum
+                const newSubforums = user.subscriptions
+                    .filter(sub => !sub.equals(subforumId))
+                await User.findByIdAndUpdate(
+                    decodedToken.user._id, 
+                    {subscriptions: newSubforums}
+                )
+                res.status(200)
+            } else {
+                // subscribe to subforum
+                const newSubforums = user.subscriptions.concat(subforumId)
+                await User.findByIdAndUpdate(
+                    decodedToken.user._id, 
+                    {subscriptions: newSubforums}
+                )
+                res.status(200)
+            }
+        } else {
+            res.status(404)
+        }
+    } catch (err) {
+        res.status(400)
     }
 })
 

@@ -15,19 +15,30 @@ const Home = () => {
         getSubs()
     }, [])
 
-    const handleRedirect = () => {
+    const handleCreate = () => {
         navigate("/create")
     }
 
-    return (
-        <div className="homepage">
-            <button onClick={handleRedirect}>create new subforum</button>
-            <div className="subforums">
-                {subforums.map(sub => <Subforum name={sub.name} users={sub.users} 
-                key={sub.id}/>)}
+    const handleAll = () => {
+        navigate("/all")
+    }
+
+    if(window.localStorage.getItem("token")) { // user is logged in
+        return (
+            <div className="homepage">
+                <button onClick={handleCreate}>create new subforum</button>
+                <button onClick={handleAll}>browse all subforums</button>
+                <div className="subforums">
+                    {subforums.map(sub => <Subforum name={sub.name} users={sub.users} 
+                    key={sub.id}/>)}
+                </div>
             </div>
-        </div>
+        )
+    }
+    return ( // user hasn't logged in
+        null
     )
+    
 }
 
 export default Home

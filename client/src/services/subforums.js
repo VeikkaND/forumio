@@ -31,11 +31,26 @@ const newSubforum = async (subforum, token) => {
 
 const deleteSubforum = async (name, token) => {
     const res = await axios.delete(`/api/subforums/${name}`, {
-        headers:{
+        headers: {
             "Authorization": `Bearer ${token}`
         }
     })
     return res.data
 }
 
-export default {getSubforums, getSubforum, newSubforum, deleteSubforum}
+const subscribe = async (name, token) => {
+    const res = await axios.put(`/api/subforums/${name}`, null , {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    return res.data
+}
+
+export default {
+    getSubforums, 
+    getSubforum, 
+    newSubforum, 
+    deleteSubforum,
+    subscribe
+}

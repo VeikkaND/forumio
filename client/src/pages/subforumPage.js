@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import postsService from "../services/posts"
 import subforumsService from "../services/subforums"
+import usersService from "../services/user"
 import Popup from "reactjs-popup"
 import { formatToDays } from "../util/util"
 
@@ -17,24 +18,60 @@ const Post = ({post, subforum}) => {
 }
 
 const InfoBox = ({mod, subforumInfo}) => {
+    const [subscribed, setSubscribed] = useState(subforumInfo.users
+        .includes(window.localStorage.getItem("userid")))
     const navigate = useNavigate()
     const handleRedirect = () => {
         navigate(`/${subforumInfo.name}/settings`)
     }
 
+    const handleSub = async () => {
+        setSubscribed(!subscribed)
+        await Promise.all([
+            subforumsService.subscribe(
+                subforumInfo.name, 
+                window.localStorage.getItem("token")
+            ),
+            usersService.subscribe(
+                subforumInfo._id, 
+                window.localStorage.getItem("token")
+            )
+        ])
+    }
+
+    const ModInfo = () => {
+        const sub = subscribed ? "unsubscribe" : "subscribe"
+        return (
+            <>
+                <p>{subforumInfo.description}</p> <br />
+                <button onClick={handleSub}>{sub}</button>
+                <p>created on: {formatToDays(subforumInfo.creationDate)} </p>
+                <button onClick={handleRedirect}>settings</button>
+            </> 
+        )  
+    }
+
+    const UserInfo = () => {
+        const sub = subscribed ? "unsubscribe" : "subscribe"
+        return (
+            <>
+                <p>{subforumInfo.description}</p> <br />
+                <button onClick={handleSub}>{sub}</button>
+                <p>created on: {formatToDays(subforumInfo.creationDate)} </p>
+            </> 
+        )   
+    }
+
     if(mod) {
         return (
             <div>
-                <p>{subforumInfo.description}</p> <br />
-                <p>created on: {formatToDays(subforumInfo.creationDate)} </p>
-                <button onClick={handleRedirect}>settings</button>
+                <ModInfo />
             </div>
         )
     }
     return (
         <div>
-            {subforumInfo.description} <br/>
-            created on: {formatToDays(subforumInfo.creationDate)} <br/>
+            <UserInfo />
         </div>
     )
 }

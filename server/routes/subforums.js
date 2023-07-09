@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
 
 //delete subforum with name
 // TODO delete posts and comments from database when deleting subforum 
-router.delete(`/:subforum`, async (req, res) => {
+router.delete("/:subforum", async (req, res) => {
     const subforum = await Subforum.findOne({name: req.params.subforum})
     const decodedToken = req.decodedToken
     if(subforum.moderators.includes(decodedToken.user._id)) {
@@ -98,6 +98,30 @@ router.delete(`/:subforum`, async (req, res) => {
         }
     } else {
         res.status(401)
+    }
+})
+
+//handle subscriptions
+router.put("/:subforum", async (req, res) => {
+    const decodedToken = req.decodedToken
+    const subforum = await Subforum.findOne({name: req.params.subforum})
+    if(decodedToken) {
+        try {
+            if(subforum.users.includes(decodedToken.user._id)) {
+                // user is already subscribed -> unsubscribe
+                const newUsers = subforum.users
+                    .filter(user => !user.equals(decodedToken.user._id))
+                await Subforum.findByIdAndUpdate(subforum._id, {users: newUsers})
+                res.status(200)
+            } else {
+                // user is not subscribed -> subscribe
+                const newUsers = subforum.users.concat(decodedToken.user._id)
+                await Subforum.findByIdAndUpdate(subforum._id, {users: newUsers})
+                res.status(200)
+            }
+        } catch (err) {
+            res.status(400)
+        }
     }
 })
 
