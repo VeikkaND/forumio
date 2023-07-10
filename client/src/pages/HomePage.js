@@ -13,11 +13,12 @@ const PostShort = ({post, subforums}) => {
         navigate(`/${subforum.name}/${post._id}`)
     }
 
+    // TODO fix clicking on link redirecting first to handleRedirect
     return (
         <div className="postshort" onClick={handleRedirect}>
             <span id="headers">
                 {post.title}
-                <a id="subname" href={`/${subforum.name}/${post._id}`}>
+                <a id="subname" href={`/${subforum.name}`}>
                     /{subforum.name}
                 </a>
             </span>
