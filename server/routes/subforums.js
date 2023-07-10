@@ -21,6 +21,11 @@ router.get("/:subforum", async (req, res) => {
     }
 })
 
+router.get("/filtered/:userid", async (req, res) => {
+    const subforums = await Subforum.find({users: req.params.userid})
+    res.json(subforums)
+})
+
 // subforum creation
 router.post("/", async (req, res) => {
     const request = req.body

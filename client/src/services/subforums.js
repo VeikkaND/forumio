@@ -20,6 +20,11 @@ const getSubforum = async (name) => {
     return res.data
 }
 
+const getSubbedSubforums = async (userid) => {
+    const res = await axios.get(`/api/subforums/filtered/${userid}`)
+    return res.data
+}
+
 const newSubforum = async (subforum, token) => {
     const res = await axios.post("/api/subforums", subforum, {
         headers: {
@@ -50,6 +55,7 @@ const subscribe = async (name, token) => {
 export default {
     getSubforums, 
     getSubforum, 
+    getSubbedSubforums,
     newSubforum, 
     deleteSubforum,
     subscribe

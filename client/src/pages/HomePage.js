@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import Subforum from "../components/subforum"
 import subforumService from "../services/subforums"
 import { useNavigate } from "react-router-dom"
+import SideNav from "../components/sidenav"
 
 const Home = () => {
     const [subforums, setSubforums] = useState([])
@@ -11,9 +12,6 @@ const Home = () => {
         async function getSubs() {
             const subs = await subforumService.getSubforums()
             setSubforums(subs)
-        }
-        async function getSubscribedSubs() {
-
         }
         getSubs()
     }, [])
@@ -27,7 +25,20 @@ const Home = () => {
     }
 
     if(window.localStorage.getItem("token")) { // user is logged in
-        // TODO show subscribed subforums on left, some posts in the middle
+        // TODO some posts in the middle
+
+        return (
+            <div className="home">
+                <SideNav />
+                <div>
+                    <button onClick={handleCreate}>create new subforum</button>
+                    <button onClick={handleAll}>browse all subforums</button>
+                </div>
+            </div>
+            
+        )
+
+        /*
         return (
             <div className="homepage">
                 <button onClick={handleCreate}>create new subforum</button>
@@ -38,6 +49,7 @@ const Home = () => {
                 </div>
             </div>
         )
+        */
     }
     return ( // user hasn't logged in
         // TODO show something for users that aren't logged in
