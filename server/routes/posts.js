@@ -33,6 +33,22 @@ router.get("/:subforum/all", async (req, res) => {
     }
 })
 
+// return latest 50 posts of subscribed subs
+router.get("/filtered/:userid", async (req, res) => {
+    const decodedToken = req.decodedToken
+    const subs = decodedToken.user.subscriptions
+    try {
+        const posts = await Post
+            .find({subforum: subs})
+                .limit(50)
+                .sort({latestComment: "desc"})
+        res.json(posts).status(200)
+    } catch (err) {
+        res.send("posts not found").status(404)
+    }
+    
+})
+
 // delete post with id
 router.delete("/:id", async (req, res) => {
     const decodedToken = req.decodedToken

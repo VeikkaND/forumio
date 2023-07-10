@@ -88,12 +88,55 @@ body {
     transition-duration: 0.3s;
     font-weight: bold;
     padding-left: 5px;
+    cursor: pointer;
 }
 
 /* || home page */
 
 .home {
     display: flex;
+}
+
+.latestsposts {
+    width: 82vw;
+    margin-left: 10px;
+    margin-top: 10px
+}
+
+.latestsposts .postshort {
+    background-color: #F6F1F1;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    border: solid 1px;
+    border-radius: 5px;
+    padding: 10px;
+    padding-bottom: 0;
+    width: 95%;
+}
+
+.latestsposts .postshort:hover {
+    cursor: pointer;
+}
+
+.latestsposts .postshort #subname {
+    margin: 0;
+}
+
+.latestsposts .postshort #headers {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.latestsposts .postshort #headers #subname {
+    margin-left: 20px;
+    font-size: 15px;
+    font-weight: normal;
+    text-decoration: none;
+    color: gray;
+}
+
+.latestsposts .postshort #headers #subname:hover {
+    text-decoration: underline;
 }
 
 /* || browse all page*/
