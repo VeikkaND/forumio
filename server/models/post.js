@@ -14,7 +14,8 @@ const postSchema = new Schema({
     author_name: String,
     subforum: {type: mongoose.Types.ObjectId, ref: "Subforum"},
     replies: [{type: mongoose.Types.ObjectId, ref: "Comment"}],
-    date: Date
+    date: Date,
+    latestComment: Date
 })
 
 const Post = mongoose.model("Post", postSchema)

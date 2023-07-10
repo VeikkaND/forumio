@@ -77,6 +77,10 @@ router.post("/", async (req, res) => {
         const newComments = user.comments.concat(newComment)
         await User
             .findByIdAndUpdate(decodedToken.user._id, {comments: newComments})
+
+        // update latest comment on post
+        await Post.findByIdAndUpdate(postId, {latestComment: req.timestamp})
+
         res.send(newComment).status(201)
     } catch (err) {
         res.send("something went wrong").status(400)
