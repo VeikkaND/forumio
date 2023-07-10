@@ -14,6 +14,11 @@ const get50Posts = async (userid, token) => {
     return res.data
 } 
 
+const get50PostsAny = async () => {
+    const res = await axios.get("/api/posts/filtered/guest/all")
+    return res.data
+}
+
 const votePost = async (id, vote, token) => {
     const res = await axios.put(`/api/posts/${id}`, {vote: vote}, {
         headers: {
@@ -52,6 +57,7 @@ const deletePost = async (postId, token) => {
 export default {
     getAllPostsOfSubforum, 
     get50Posts, 
+    get50PostsAny,
     votePost, 
     removeVote, 
     newPost,

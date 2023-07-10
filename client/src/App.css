@@ -91,6 +91,36 @@ body {
     cursor: pointer;
 }
 
+.sidenav button {
+    padding: 5px;
+    margin-bottom: 10px;
+    background-color: #19A7CE;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-style: none;
+    color: white;
+    font-size: 18px;
+}
+
+.sidenav button:hover {
+    transition-duration: 0.4s;
+    background-color: #168aaa;
+    padding-right: 15px;
+}
+
+.sidenav .login {
+    padding-bottom: 10px;
+}
+
+.sidenav .login a {
+    color: black;
+}
+
+.sidenav .login a:hover {
+    color: black;
+    background-color: #98e9ff;
+}
+
 /* || home page */
 
 .home {
@@ -137,6 +167,19 @@ body {
 
 .latestsposts .postshort #headers #subname:hover {
     text-decoration: underline;
+}
+
+.latestsposts .all {
+    text-align: center;
+}
+
+.latestsposts .all a {
+    color: black;
+    padding: 2px;
+}
+
+.latestsposts .all a:hover {
+    background-color: #98e9ff;
 }
 
 /* || browse all page*/

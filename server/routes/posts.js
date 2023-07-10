@@ -49,6 +49,19 @@ router.get("/filtered/:userid", async (req, res) => {
     
 })
 
+// return latest 50 posts from all subs
+router.get("/filtered/guest/all", async (req, res) => {
+    try {
+        const posts = await Post
+            .find({})
+                .limit(50)
+                .sort({latestComment: "desc"})
+        res.json(posts).status(200)
+    } catch (err) {
+        res.send("posts not found").status(404)
+    }
+})
+
 // delete post with id
 router.delete("/:id", async (req, res) => {
     const decodedToken = req.decodedToken

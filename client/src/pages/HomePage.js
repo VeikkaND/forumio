@@ -39,60 +39,70 @@ const Home = () => {
             const subs = await subforumService.getSubforums()
             setSubforums(subs)
 
-            const posts = await postsService
-                .get50Posts(
-                    window.localStorage.getItem("userid"), 
-                    window.localStorage.getItem("token")
-                )
-            setPosts(posts)
+            const userid = window.localStorage.getItem("userid")
+            const token = window.localStorage.getItem("token")
+
+            if(userid && token) {
+                // user signed in
+                const posts = await postsService
+                    .get50Posts(
+                        window.localStorage.getItem("userid"), 
+                        window.localStorage.getItem("token")
+                    )
+                setPosts(posts)
+            } else {
+                // user not signed in
+                const posts = await postsService
+                    .get50PostsAny()
+                setPosts(posts)
+            }
         }
         getSubsAndPosts()
     }, [])
 
-    const handleCreate = () => {
-        navigate("/create")
-    }
-
-    const handleAll = () => {
-        navigate("/all")
-    }
 
     if(window.localStorage.getItem("token")) { // user is logged in
-        // TODO some posts in the middle
 
         return (
             <div className="home">
                 <SideNav />
                 <div className="latestsposts">
-                    <button onClick={handleCreate}>create new subforum</button>
-                    <button onClick={handleAll}>browse all subforums</button>
                     <div className="posts">
                         {posts.map(post => 
                             <PostShort post={post} subforums={subforums} 
                                 key={post._id}/>
                         )}
                     </div>
+                    <div className="all">
+                        <span>
+                            Want to see more? &nbsp;
+                            <a href="/all">Browse all subforums</a>
+                        </span>
+                    </div>
+                    
                 </div>
             </div>
             
         )
-
-        /*
-        return (
-            <div className="homepage">
-                <button onClick={handleCreate}>create new subforum</button>
-                <button onClick={handleAll}>browse all subforums</button>
-                <div className="subforums">
-                    {subforums.map(sub => <Subforum name={sub.name} users={sub.users} 
-                    key={sub.id}/>)}
+    }
+    return ( 
+        <div className="home">
+            <SideNav />
+            <div className="latestsposts">
+                <div className="posts">
+                    {posts.map(post => 
+                        <PostShort post={post} subforums={subforums} 
+                            key={post._id}/>
+                    )}
+                </div>
+                <div className="all">
+                    <span>
+                        Want to see more? &nbsp;
+                        <a href="/all">Browse all subforums</a>
+                    </span>
                 </div>
             </div>
-        )
-        */
-    }
-    return ( // user hasn't logged in
-        // TODO show something for users that aren't logged in
-        null
+        </div>
     )
     
 }

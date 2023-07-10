@@ -17,22 +17,46 @@ const SubShort = ({sub}) => {
 
 const SideNav = () => {
     const [subscribedSubs, setSubscribedSubs] = useState([]) 
+    const navigate = useNavigate()
+    const userid = window.localStorage.getItem("userid")
+
     useEffect(() => {
-        async function getSubbedSubs() {
-            const subs = await subforumsService
-                .getSubbedSubforums(window.localStorage.getItem("userid"))
-            setSubscribedSubs(subs)
+        if(userid) {
+            async function getSubbedSubs() {
+                const subs = await subforumsService
+                    .getSubbedSubforums(window.localStorage.getItem("userid"))
+                setSubscribedSubs(subs)
+            }
+            getSubbedSubs()
         }
-        getSubbedSubs()
     }, [])
 
-    if(subscribedSubs.length > 0) {
+    const handleCreate = () => {
+        navigate("/create")
+    }
+
+    const handleAll = () => {
+        navigate("/all")
+    }
+
+    if(subscribedSubs.length > 0 && userid) {
         return (
             <div className="sidenav">
                 <h3>Subscribed</h3>
                 {subscribedSubs.map(sub => 
                     <SubShort sub={sub} key={sub._id}/>
                 )}
+                <button onClick={handleAll} id="all">All Subforums</button> <br/>
+                <button onClick={handleCreate}>New Subforum</button>
+            </div>
+        )
+    } else if (!userid) {
+        return (
+            <div className="sidenav">
+                <h3>Subscribed</h3>
+                <div className="login">
+                    <a href="/login">login to subscribe</a>
+                </div>
             </div>
         )
     }
