@@ -64,6 +64,7 @@ router.get("/login", async (req, res) => {
 
 // delete user
 router.delete("/:id", async (req, res) => {
+    // TODO delete comments, posts and subscriptions
     const deleteId = req.params.id
     try {
         await User.findByIdAndDelete(deleteId)
@@ -88,7 +89,7 @@ router.put("/", async (req, res) => {
                     decodedToken.user._id, 
                     {subscriptions: newSubforums}
                 )
-                res.status(200)
+                res.send(newSubforums).status(200)
             } else {
                 // subscribe to subforum
                 const newSubforums = user.subscriptions.concat(subforumId)
@@ -96,10 +97,10 @@ router.put("/", async (req, res) => {
                     decodedToken.user._id, 
                     {subscriptions: newSubforums}
                 )
-                res.status(200)
+                res.send(newSubforums).status(200)
             }
         } else {
-            res.status(404)
+            res.send("user not found").status(404)
         }
     } catch (err) {
         res.status(400)

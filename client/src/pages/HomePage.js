@@ -9,8 +9,11 @@ const Home = () => {
 
     useEffect(() => {
         async function getSubs() {
-        const subs = await subforumService.getSubforums()
-        setSubforums(subs)
+            const subs = await subforumService.getSubforums()
+            setSubforums(subs)
+        }
+        async function getSubscribedSubs() {
+
         }
         getSubs()
     }, [])
@@ -24,6 +27,7 @@ const Home = () => {
     }
 
     if(window.localStorage.getItem("token")) { // user is logged in
+        // TODO show subscribed subforums on left, some posts in the middle
         return (
             <div className="homepage">
                 <button onClick={handleCreate}>create new subforum</button>
@@ -36,6 +40,7 @@ const Home = () => {
         )
     }
     return ( // user hasn't logged in
+        // TODO show something for users that aren't logged in
         null
     )
     

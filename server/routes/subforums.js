@@ -36,6 +36,14 @@ router.post("/", async (req, res) => {
         })
         try {
             await newSubforum.save()
+
+            // add to creators subscriptions
+            const user = await User.findById(decodedToken.user._id)
+            const newSubs = user.subscriptions.concat(newSubforum._id)
+            await User.findByIdAndUpdate(decodedToken.user._id, {
+                subscriptions: newSubs
+            })
+
             res.json(newSubforum).status(201)
         } catch (err) {
             res.status(400)
@@ -88,13 +96,26 @@ router.delete("/:subforum", async (req, res) => {
                             .findByIdAndDelete(p)
                     })
                 }
+
+                // delete subforum subscriptions from users in DB
+                if(subforum.users.length > 0) {
+                    subforum.users.forEach(async user => {
+                        const u = await User.findById(user)
+                        const newSubs = u.subscriptions
+                            .filter(sub => !sub.equals(subforum._id))
+                        await User
+                            .findByIdAndUpdate(user, {subscriptions: newSubs})
+                    })
+                }
+
+                // delete subforum
                 await Subforum.findByIdAndDelete(subforum._id)
-                res.status(204)
+                res.send("subforum deleted").status(204)
             } catch (err) {
-                res.status(400)
+                res.send("something went wrong").status(400)
             }
         } else {
-            res.status(404)
+            res.send("subforum not found").status(404)
         }
     } else {
         res.status(401)
@@ -112,15 +133,15 @@ router.put("/:subforum", async (req, res) => {
                 const newUsers = subforum.users
                     .filter(user => !user.equals(decodedToken.user._id))
                 await Subforum.findByIdAndUpdate(subforum._id, {users: newUsers})
-                res.status(200)
+                res.send(newUsers).status(200)
             } else {
                 // user is not subscribed -> subscribe
                 const newUsers = subforum.users.concat(decodedToken.user._id)
                 await Subforum.findByIdAndUpdate(subforum._id, {users: newUsers})
-                res.status(200)
+                res.send(newUsers).status(200)
             }
         } catch (err) {
-            res.status(400)
+            res.send("something went wrong").status(400)
         }
     }
 })
