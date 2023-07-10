@@ -15,13 +15,20 @@ const CreateSubforumPage = () => {
     }
 
     return (
-        <div>
+        <div className="createsub">
+            <div className="header">
+                <h2>Create a new subforum</h2>
+            </div>
             <form onSubmit={handleSubmit}>
-                <p>title</p>
-                <input name="title"></input> <br/>
-                <p>description</p>
-                <textarea name="description"></textarea> <br/>
-                <button type="submit">create</button>
+                <h3>Title</h3>
+                <input name="title" 
+                    placeholder="A fitting title for your subforum">
+                </input> <br/>
+                <h3>Description</h3>
+                <textarea name="description" rows={4} 
+                    placeholder="Describe the subforum in a few words">
+                </textarea> <br/>
+                <button type="submit">Create</button>
             </form>
             
         </div>

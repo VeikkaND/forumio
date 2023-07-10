@@ -5,6 +5,14 @@ body {
     margin: 0;
 }
 
+textarea::placeholder {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+textarea {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 /* || navbar */
 
 .navbar {
@@ -186,12 +194,15 @@ body {
 
 .subforums {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .subforum {
     border: 2px solid;
     border-radius: 10px;
     width: 50%;
+    min-width: 100px;
+    max-width: 400px;
     background-color: #F6F1F1;
     margin: 5px;
     padding-left: 20px;
@@ -262,6 +273,7 @@ body {
 .commentform textarea {
     width: 75%;
     overflow: visible;
+    resize: none;
 }
 
 .commentform button {
@@ -322,4 +334,48 @@ body {
 
 .loginpage a:hover {
     background-color: antiquewhite;
+}
+
+/* || new subforum page*/
+
+.createsub h2 {
+    text-align: center;
+    border-bottom: solid 1px;
+    width: 300px;
+    margin: auto;
+    padding-top: 30px;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+.createsub form {
+    margin: auto;
+    width: fit-content;
+    text-align: center;
+}
+
+.createsub input {
+    width: 300px;
+    margin-bottom: 30px;
+}
+
+.createsub textarea {
+    width: 300px;
+    resize: none;
+}
+
+.createsub button {
+    margin-top: 20px;
+    padding: 10px 40px;
+    border-radius: 10px;
+    border-style: none;
+    background-color: #19A7CE;
+    color: white;
+}
+
+.createsub button:hover {
+    transition-duration: 0.4s;
+    background-color: #168aaa;
+    padding-left: 43px;
+    padding-right: 43px;
 }
