@@ -266,6 +266,26 @@ textarea {
     padding-top: 1px;
 }
 
+.postpage #like {
+    margin-right: 5px;
+}
+
+.postpage #like:hover {
+    cursor: pointer;
+}
+
+.postpage #dislike {
+    margin-left: 5px;
+}
+
+.postpage #dislike:hover {
+    cursor: pointer;
+}
+
+.postpage button {
+    margin-left: 10px;
+}
+
 .commentform {
     display: flex;
 }

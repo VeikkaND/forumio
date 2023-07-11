@@ -5,6 +5,7 @@ import commentService from "../services/comments"
 import postsService from "../services/posts"
 import CommentForm from "../components/commentForm"
 import Comment from "../components/comment"
+import { RiArrowUpLine, RiArrowDownLine } from "react-icons/ri"
 import { dateFormatter } from "../util/util"
 
 const Comments = ({postId}) => {
@@ -130,7 +131,38 @@ const Post = () => {
         navigate(`/${subforum}`)
     }
 
+    const CommentSection = () => {
+        return (
+            <>
+                <h4>comments</h4>
+                <CommentForm postId={post._id}/>
+                <Comments postId={post._id}/>
+            </>
+        )
+    }
+
     if(post) {
+        // coloring of like icons
+        if(likes.includes(window.localStorage.getItem("userid"))) {
+            var likeStyle = {
+                fill: "#19A7CE"
+            }
+        } else {
+            var likeStyle = {
+                fill: "black"
+            }
+        }
+
+        if(dislikes.includes(window.localStorage.getItem("userid"))) {
+            var dislikeStyle = {
+                fill: "red"
+            }
+        } else {
+            var dislikeStyle = {
+                fill: "black"
+            }
+        }
+
         if(post.author === window.localStorage.getItem("userid")) {
             // user is the author of post
             return (
@@ -140,31 +172,32 @@ const Post = () => {
                         <h2>{post.title}</h2>
                         by {post.author_name} {dateFormatter(post.date)}
                         <p>{post.content}</p>
-                        {likes.length - dislikes.length} likes &nbsp; 
-                        <button onClick={handleLike}>like</button>
-                        <button onClick={handleDislike}>dislike</button>
-                        <button onClick={handleDelete}>remove</button>
+                        <RiArrowUpLine onClick={handleLike} style={likeStyle} 
+                            id="like"/> 
+                        {likes.length - dislikes.length} 
+                        <RiArrowDownLine onClick={handleDislike} 
+                            style={dislikeStyle} id="dislike"/> 
+                        <button onClick={handleDelete}>delete</button>
                     </div>
-                    
-                    <h4>comments</h4>
-                    <CommentForm postId={post._id}/>
-                    <Comments postId={post._id}/>
+                    <CommentSection />
                 </div>
             )
         } else {
             // user is not the author of post
             return (
-                <div>
-                    <Link to={`/${subforum}`}>return to {subforum}</Link>
-                    <h2>{post.title}</h2>
-                    by {post.author_name} {dateFormatter(post.date)}
-                    <p>{post.content}</p>
-                    {likes.length - dislikes.length} likes &nbsp; 
-                    <button onClick={handleLike}>like</button>
-                    <button onClick={handleDislike}>dislike</button>
-                    <h4>comments</h4>
-                    <CommentForm postId={post._id}/>
-                    <Comments postId={post._id}/>
+                <div className="postpage">
+                    <div className="post">
+                        <Link to={`/${subforum}`}>return to {subforum}</Link>
+                        <h2>{post.title}</h2>
+                        by {post.author_name} {dateFormatter(post.date)}
+                        <p>{post.content}</p>
+                        <RiArrowUpLine onClick={handleLike} style={likeStyle} 
+                            id="like"/> 
+                        {likes.length - dislikes.length} 
+                        <RiArrowDownLine onClick={handleDislike} 
+                            style={dislikeStyle} id="dislike"/>
+                    </div>
+                    <CommentSection />
                 </div>
             )
         }
