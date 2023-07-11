@@ -1,6 +1,7 @@
 import commentService from "../services/comments"
 import { useState } from "react"
 import { dateFormatter } from "../util/util"
+import { RiArrowUpLine, RiArrowDownLine } from "react-icons/ri"
 
 const ReplyForm = ({parentId, postId}) => {
     const [replyOpened, setReplyOpened] = useState(false)
@@ -29,11 +30,12 @@ const ReplyForm = ({parentId, postId}) => {
     }
 
     return (
-        <div>
-            <button onClick={handleReply}></button>
-            <div style={replyStyle}>
+        <div className="replyform">
+            <button onClick={handleReply}>reply</button>
+            <div style={replyStyle} className="form">
                 <form onSubmit={handleSubmit}>
-                    <textarea name="content"></textarea>
+                    <textarea name="content" rows={4} cols={50} 
+                    placeholder="Write something here"></textarea>
                     <button type="submit">send</button>
                 </form>
             </div>
@@ -89,42 +91,76 @@ const Comment = ({comment}) => {
         // TODO update rendered comments
     }
 
+    const handleScroll = async (event) => {
+        event.preventDefault()
+    }
+
     // TODO clean this vvv and make replies under replies
     const tempStyle = {
-        border: "solid 1px",
         margin: 5,
         marginLeft: 10
     }
 
+    // coloring for likes
+    if(likes.includes(window.localStorage.getItem("userid"))) {
+        var likeStyle = {
+            fill: "#19A7CE"
+        }
+    } else {
+        var likeStyle = {
+            fill: "black"
+        }
+    }
+
+    if(dislikes.includes(window.localStorage.getItem("userid"))) {
+        var dislikeStyle = {
+            fill: "red"
+        }
+    } else {
+        var dislikeStyle = {
+            fill: "black"
+        }
+    }
+
     if(comment.parent) { // comment is a reply to a comment
-        const replyStyle = {...tempStyle, marginLeft: comment.depth * 10}
+        const replyStyle = {...tempStyle, marginLeft: comment.depth * 20}
         if(comment.author_name === window.localStorage.getItem("username")) {
             // user is the comment author
             return (
-                <div style={replyStyle}>
-                    {comment.author_name} {dateFormatter(comment.date)} &nbsp; 
-                    comment id: {comment._id} <br/>
-                    parent comment: {comment.parent} <br/>
+                <div style={replyStyle} className="comment">
+                    <span id="header">
+                        <a href={`/user/${comment.author_name}`}>
+                            u/{comment.author_name}
+                        </a>
+                        {dateFormatter(comment.date)}
+                    </span>
                     <p>{comment.content}</p>
-                    {likes.length - dislikes.length} likes &nbsp;
-                    <button onClick={handleLike}>like</button>
-                    <button onClick={handleDislike}>dislike</button>
-                    <button onClick={handleDelete}>remove</button>
+                    <RiArrowUpLine onClick={handleLike} style={likeStyle} 
+                            id="like"/> 
+                    {likes.length - dislikes.length} 
+                    <RiArrowDownLine onClick={handleDislike} 
+                        style={dislikeStyle} id="dislike"/> 
+                    <button onClick={handleDelete}>delete</button>
                     <ReplyForm parentId={comment._id}
                         postId={comment.post}/>
-                </div>
+                </div>  
             )
         } else {
             // user is not the comment author
             return (
-                <div style={replyStyle}>
-                    {comment.author_name} {dateFormatter(comment.date)} &nbsp; 
-                    comment id: {comment._id} <br/>
-                    parent comment: {comment.parent} <br/>
+                <div style={replyStyle} className="comment">
+                    <span id="header">
+                        <a href={`/user/${comment.author_name}`}>
+                            u/{comment.author_name}
+                        </a>
+                        {dateFormatter(comment.date)}
+                    </span>
                     <p>{comment.content}</p>
-                    {likes.length - dislikes.length} likes &nbsp;
-                    <button onClick={handleLike}>like</button>
-                    <button onClick={handleDislike}>dislike</button>
+                    <RiArrowUpLine onClick={handleLike} style={likeStyle} 
+                            id="like"/> 
+                    {likes.length - dislikes.length} 
+                    <RiArrowDownLine onClick={handleDislike} 
+                        style={dislikeStyle} id="dislike"/> 
                     <ReplyForm parentId={comment._id}
                         postId={comment.post}/>
                 </div>
@@ -135,14 +171,20 @@ const Comment = ({comment}) => {
         if(comment.author_name === window.localStorage.getItem("username")) {
             // user is the comment author
             return (
-                <div style={tempStyle}>
-                    {comment.author_name} {dateFormatter(comment.date)} &nbsp; 
-                    comment id: {comment._id} <br/>
+                <div style={tempStyle} className="comment">
+                    <span id="header">
+                        <a href={`/user/${comment.author_name}`}>
+                            u/{comment.author_name}
+                        </a>
+                        {dateFormatter(comment.date)}
+                    </span>
                     <p>{comment.content}</p>
-                    {likes.length - dislikes.length} likes &nbsp;
-                    <button onClick={handleLike}>like</button>
-                    <button onClick={handleDislike}>dislike</button>
-                    <button onClick={handleDelete}>remove</button>
+                    <RiArrowUpLine onClick={handleLike} style={likeStyle} 
+                            id="like"/> 
+                    {likes.length - dislikes.length} 
+                    <RiArrowDownLine onClick={handleDislike} 
+                        style={dislikeStyle} id="dislike"/> 
+                    <button onClick={handleDelete}>delete</button>
                     <ReplyForm parentId={comment._id}
                         postId={comment.post}/>
                 </div>
@@ -150,13 +192,19 @@ const Comment = ({comment}) => {
         } else {
             // user is not the comment author
             return (
-                <div style={tempStyle}>
-                    {comment.author_name} {dateFormatter(comment.date)} &nbsp; 
-                    comment id: {comment._id} <br/>
+                <div style={tempStyle} className="comment">
+                    <span id="header">
+                        <a href={`/user/${comment.author_name}`}>
+                            u/{comment.author_name}
+                        </a>
+                        {dateFormatter(comment.date)}
+                    </span>
                     <p>{comment.content}</p>
-                    {likes.length - dislikes.length} likes &nbsp;
-                    <button onClick={handleLike}>like</button>
-                    <button onClick={handleDislike}>dislike</button>
+                    <RiArrowUpLine onClick={handleLike} style={likeStyle} 
+                            id="like"/> 
+                    {likes.length - dislikes.length} 
+                    <RiArrowDownLine onClick={handleDislike} 
+                        style={dislikeStyle} id="dislike"/> 
                     <ReplyForm parentId={comment._id}
                         postId={comment.post}/>
                 </div>

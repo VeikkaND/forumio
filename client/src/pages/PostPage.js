@@ -59,7 +59,7 @@ const Comments = ({postId}) => {
     }, [])
     if(comments.length > 0) {
         return (
-            <div>
+            <div className="comments">
                 {comments.map(comment => <Comment comment={comment} 
                     key={comment._id}/> )}
             </div>
@@ -169,8 +169,13 @@ const Post = () => {
                 <div className="postpage">
                     <Link to={`/${subforum}`}>return to {subforum}</Link>
                     <div className="post">
-                        <h2>{post.title}</h2>
-                        by {post.author_name} {dateFormatter(post.date)}
+                        <div className="header">
+                            <span>
+                                {post.title} &nbsp;
+                                <a href={`/user/${post.author_name}`}>u/{post.author_name}</a>
+                            </span>
+                        </div>
+                        <p id="date">{dateFormatter(post.date)}</p>
                         <p>{post.content}</p>
                         <RiArrowUpLine onClick={handleLike} style={likeStyle} 
                             id="like"/> 
@@ -188,8 +193,13 @@ const Post = () => {
                 <div className="postpage">
                     <div className="post">
                         <Link to={`/${subforum}`}>return to {subforum}</Link>
-                        <h2>{post.title}</h2>
-                        by {post.author_name} {dateFormatter(post.date)}
+                        <div className="header">
+                            <span>
+                                {post.title} &nbsp;
+                                <a href={`/user/${post.author_name}`}>u/{post.author_name}</a>
+                            </span>
+                        </div>
+                        <p id="date">{dateFormatter(post.date)}</p>
                         <p>{post.content}</p>
                         <RiArrowUpLine onClick={handleLike} style={likeStyle} 
                             id="like"/> 
