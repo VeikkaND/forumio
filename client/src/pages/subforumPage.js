@@ -4,7 +4,6 @@ import { Link } from "react-router-dom"
 import postsService from "../services/posts"
 import subforumsService from "../services/subforums"
 import usersService from "../services/user"
-import Popup from "reactjs-popup"
 import { formatToDays } from "../util/util"
 
 const Post = ({post, subforum}) => {
@@ -13,6 +12,33 @@ const Post = ({post, subforum}) => {
             <Link to={`/${subforum}/${post._id}`}>{post.title}</Link>
             <br/>
             &nbsp; likes: {post.likes.length - post.dislikes.length} &nbsp; comments: {post.replies.length}
+        </div>
+    )
+}
+
+const NewPostForm = ({style, subforumInfo}) => {
+    const handleSubmit = (event) => {
+        const post = {
+            title: event.target.title.value,
+            content: event.target.content.value,
+            subforum: subforumInfo.name
+        }
+
+        postsService.newPost(post, window.localStorage.getItem("token"))
+    }
+
+    return (
+        <div className="posts" style={style}>
+            <div className="postform">
+                <form onSubmit={handleSubmit}>
+                    <p>Title</p>
+                    <input name="title" placeholder="Title"></input>
+                    <p>Content</p>
+                    <textarea name="content" placeholder="Content"></textarea>
+                    <button type="submit">post</button>
+                </form>
+                
+            </div>
         </div>
     )
 }
@@ -80,15 +106,7 @@ const SubforumPage = () => {
     const {subforum} = useParams()
     const [posts, setPosts] = useState([])
     const [subforumInfo, setSubforumInfo] = useState(null)
-
-    const handleNewPost = (event) => {
-        const post = {
-            title: event.target.title.value,
-            content: event.target.content.value,
-            subforum: subforum
-        }
-        postsService.newPost(post, window.localStorage.getItem("token"))
-    }
+    const [newPostOpened, setNewPostOpened] = useState(false)
 
     useEffect(() => {
         async function getPosts() {
@@ -111,22 +129,27 @@ const SubforumPage = () => {
         )
     }
 
+    if(newPostOpened) {
+        var newPostStyle = {
+            "display": "block"
+        }
+    } else {
+        var newPostStyle = {
+            "display": "none"
+        }
+    }
+
+    const handleOpenForm = () => {
+        setNewPostOpened(!newPostOpened)
+    }
+
     if(subforumInfo.moderators.includes(window.localStorage.getItem("userid"))) {
         // UI with mod role
         return (
             <div className="subforumpage">
                 <div className="posts">
-                    <Popup trigger={<button>new post</button>} position={"bottom left"}>
-                        <div>
-                            <form onSubmit={handleNewPost}>
-                                <p>Title</p>
-                                <input name="title"></input> <br/>
-                                <p>Content</p>
-                                <textarea name="content"></textarea>
-                                <button type="submit"></button>
-                            </form>
-                        </div>
-                    </Popup>
+                    <button onClick={handleOpenForm}>new post</button>
+                    <NewPostForm subforumInfo={subforumInfo} style={newPostStyle} />
                     {posts.map(post => <Post post={post} subforum={subforum} 
                         key={post._id}/>)}
                 </div>
@@ -142,17 +165,8 @@ const SubforumPage = () => {
         // UI with no mod role
         <div className="subforumpage">
             <div className="posts">
-                <Popup trigger={<button>new post</button>} position={"bottom left"}>
-                    <div>
-                        <form onSubmit={handleNewPost}>
-                            <p>Title</p>
-                            <input name="title"></input> <br/>
-                            <p>Content</p>
-                            <textarea name="content"></textarea>
-                            <button type="submit"></button>
-                        </form>
-                    </div>
-                </Popup>
+                <button onClick={handleOpenForm}>new post</button>
+                <NewPostForm subforumInfo={subforumInfo} style={newPostStyle} />
                 {posts.map(post => <Post post={post} subforum={subforum} 
                     key={post._id}/>)}
             </div>

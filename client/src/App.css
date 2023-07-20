@@ -258,6 +258,22 @@ html {
     border-radius: 10px;
 }
 
+.subforumpage .posts .posts .postform {
+    
+}
+
+.subforumpage .posts .posts .postform input {
+    width: 80%;
+}
+
+.subforumpage .posts .posts .postform textarea {
+    max-width: 100%;
+}
+
+.subforumpage .posts .posts .postform p {
+    font-weight: bold;
+}
+
 /* || post page */
 
 .postpage {
