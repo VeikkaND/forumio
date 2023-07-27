@@ -15,7 +15,7 @@ const CommentForm = ({postId}) => {
         }
         commentService.postComment(
             com, window.localStorage.getItem("token"), postId)
-        // TODO update PostPage.js setComments() with new comments
+        window.location.reload(false)
     }
 
     return (

@@ -86,16 +86,17 @@ const Comment = ({comment}) => {
     }
 
     const handleDelete = async () => {
-        const res = await commentService
-            .deleteComment(comment._id, window.localStorage.getItem("token"))
-        // TODO update rendered comments
+        if(window.confirm("Delete comment?")) {
+            const res = await commentService
+                .deleteComment(comment._id, window.localStorage.getItem("token"))
+            window.location.reload(false)
+        }
     }
 
     const handleScroll = async (event) => {
         event.preventDefault()
     }
 
-    // TODO clean this vvv and make replies under replies
     const tempStyle = {
         margin: 5,
         marginLeft: 10

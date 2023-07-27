@@ -9,11 +9,13 @@ const PostShort = ({post, subforums}) => {
     const navigate = useNavigate()
     const subforum = subforums.find(sub => sub.id === post.subforum)
 
-    const handleRedirect = () => {
-        navigate(`/${subforum.name}/${post._id}`)
+    const handleRedirect = (event) => {
+        // only redirect to post if not clicking the subforum name
+        if(event.target.id !== "subname") {
+            navigate(`/${subforum.name}/${post._id}`)
+        }
     }
 
-    // TODO fix clicking on link redirecting first to handleRedirect
     return (
         <div className="postshort" onClick={handleRedirect}>
             <span id="headers">

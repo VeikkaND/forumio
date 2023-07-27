@@ -38,7 +38,7 @@ const UserPage = () => {
     } 
     return (
         <div>
-            404 not found
+            Loading...
         </div>
     )
 }
